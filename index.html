@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>body{margin:0;font-size:14px}[hidden]{display:none!important}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<title>מוסך הורייזן 6</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="מוסך FH6">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#eceef1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karantina:wght@700&family=Assistant:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: one narrow column, sticky tab rail, results as a ranked ladder; detail opens as a bottom sheet */
+:root{
+  --bg:#eceef1; --surface:#ffffff; --sunk:#e1e4e9; --line:#cfd4dc;
+  --fg:#15171c; --muted:#5a6170; --accent:#d81e5b; --accent-ink:#ffffff;
+  --display:"Karantina","Assistant",system-ui,sans-serif;
+  --body:"Assistant",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --cD:#38b6d8; --cC:#e6c229; --cB:#f08a24; --cA:#e0383e; --cS1:#a04fd6; --cS2:#2f6fe0; --cR:#18a874;
+  --shadow:0 10px 40px rgba(20,24,32,.18);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111318; --surface:#1a1d24; --sunk:#232731; --line:#2f3440;
+  --fg:#eef0f4; --muted:#9aa2b2; --accent:#ff4f86; --accent-ink:#16070c; --shadow:0 10px 40px rgba(0,0,0,.5); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111318; --surface:#1a1d24; --sunk:#232731; --line:#2f3440;
+  --fg:#eef0f4; --muted:#9aa2b2; --accent:#ff4f86; --accent-ink:#16070c; --shadow:0 10px 40px rgba(0,0,0,.5); color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button,input,label,.row{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+input,button{font-size:16px}
+body.lock{overflow:hidden;position:fixed;width:100%}
+.ios-note{direction:rtl;margin:16px;padding:14px;border-radius:12px;background:#fff3cd;color:#3a2c00;font:16px/1.5 -apple-system,system-ui,sans-serif}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.45}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{direction:rtl;max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 60px}
+header h1{font-family:var(--display);font-size:clamp(44px,11vw,64px);line-height:.9;margin:0;letter-spacing:.5px}
+header h1 span{color:var(--accent)}
+header p{margin:6px 0 0;color:var(--muted);max-width:52ch}
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:6px;padding-block:12px;margin-top:10px;border-bottom:1px solid var(--line)}
+.tab{flex:1;font:600 14px var(--body);padding:10px 4px;white-space:nowrap;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:10px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.tab small{font-family:var(--mono);font-size:12px;opacity:.7}
+section{display:flex;flex-direction:column;gap:18px;padding-top:18px}
+.lbl{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--muted);margin:0 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:600 14px var(--body);padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.chip:focus-visible,.tab:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.plate{font:600 13px var(--mono);display:inline-flex;align-items:stretch;border-radius:4px;overflow:hidden;border:1.5px solid var(--pc);line-height:1;direction:ltr;flex-shrink:0}
+.plate b{background:var(--pc);color:#fff;padding:4px 5px;min-width:24px;text-align:center}
+.plate i{font-style:normal;padding:4px 6px;background:var(--surface);color:var(--fg);font-variant-numeric:tabular-nums}
+.cls-chip{padding:6px 8px}
+.cls-chip .plate{border-color:var(--pc)}
+.toggles{display:flex;flex-direction:column;gap:8px}
+.tg{display:flex;align-items:center;gap:10px;cursor:pointer;color:var(--fg)}
+.tg input{width:18px;height:18px;accent-color:var(--accent)}
+.summary{background:var(--sunk);border-radius:12px;padding:12px 14px;color:var(--muted);font-size:14px}
+.summary strong{color:var(--fg)}
+.list{display:flex;flex-direction:column;gap:8px;list-style:none;margin:0;padding:0}
+.row{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;text-align:start;width:100%;font:inherit;color:inherit}
+.row:hover{border-color:var(--muted)}
+.rank{font-family:var(--display);font-size:30px;color:var(--muted);text-align:center;line-height:1}
+.row:first-child .rank{color:var(--accent)}
+.meta{min-width:0}
+.nm{font-weight:700;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sub{font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.bar{height:4px;background:var(--sunk);border-radius:2px;margin-top:6px;overflow:hidden}
+.bar span{display:block;height:100%;background:var(--accent)}
+.side{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.score{font:600 18px var(--mono);font-variant-numeric:tabular-nums}
+.tag{font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px;background:var(--sunk);color:var(--muted)}
+.tag.warn{color:var(--cB)} .tag.own{background:var(--accent);color:var(--accent-ink)}
+.search{width:100%;font:16px var(--body);padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
+.more{align-self:center;font:600 14px var(--body);padding:10px 18px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.empty{padding:28px 16px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(10,12,16,.45);z-index:20}
+.sheet{position:fixed;inset:auto 0 0 0;z-index:21;max-height:88vh;max-height:88dvh;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;background:var(--surface);border-radius:18px 18px 0 0;box-shadow:var(--shadow);padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+.sheet-in{direction:rtl;max-width:760px;margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px));padding-block:12px 0;display:flex;flex-direction:column;gap:16px}
+.grip{width:44px;height:5px;border-radius:3px;background:var(--line);align-self:center}
+.sh-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.sh-head h2{font-family:var(--display);font-size:38px;line-height:.95;margin:0;text-wrap:balance}
+.x{border:1px solid var(--line);background:var(--sunk);color:var(--fg);border-radius:50%;width:36px;height:36px;font-size:18px;cursor:pointer;flex-shrink:0}
+.ladder{position:relative;height:44px;direction:ltr}
+.ladder .seg{position:absolute;top:14px;height:12px}
+.ladder .mk{position:absolute;top:4px;width:2px;height:30px;background:var(--fg)}
+.ladder .mk span{position:absolute;top:30px;transform:translateX(-50%);font:600 11px var(--mono);white-space:nowrap;color:var(--fg)}
+.ladder .tgt{outline:2px solid var(--fg);outline-offset:1px;z-index:1}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.kv div{background:var(--sunk);border-radius:10px;padding:8px 10px}
+.kv dt{font-size:12px;color:var(--muted)} .kv dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums}
+.steps{margin:0;padding:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:8px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.steps li::before{content:counter(s);font:600 13px var(--mono);background:var(--fg);color:var(--bg);border-radius:6px;height:24px;display:grid;place-items:center}
+.steps b{display:block}
+.steps span{color:var(--muted);font-size:14px}
+table.tune{width:100%;border-collapse:collapse;font-size:14px}
+.tune td{padding:7px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+.tune td:last-child{font-family:var(--mono);font-size:13px;text-align:left;direction:ltr;white-space:nowrap}
+.note{font-size:13px;color:var(--muted);margin:0}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.btn{font:700 15px var(--body);padding:11px 16px;border-radius:10px;border:1px solid var(--line);background:var(--sunk);color:var(--fg);cursor:pointer}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+h3{margin:0;font-size:16px}
+.seg3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.seg3 button{font:700 16px var(--body);padding:12px 6px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+.seg3 button small{font:500 11px var(--mono);color:var(--muted);letter-spacing:.06em}
+.seg3 button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.seg3 button[aria-pressed="true"] small{color:var(--bg);opacity:.7}
+.sub2{margin-top:8px}
+.picks{margin-top:8px}
+.picks:empty{display:none}
+.chosen{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1.5px solid var(--accent);border-radius:12px;padding:10px 12px;margin-top:8px}
+.chosen .meta{min-width:0}
+.linkbtn{font:600 13px var(--body);background:none;border:0;color:var(--accent);cursor:pointer;padding:4px}
+.budget{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;background:var(--sunk);border-radius:12px;padding:12px 14px}
+.budget .big{font:600 28px var(--mono);font-variant-numeric:tabular-nums;line-height:1}
+.budget .big.neg{color:var(--cA)}
+.parts{display:flex;flex-direction:column;gap:6px;list-style:none;margin:0;padding:0}
+.part{display:grid;grid-template-columns:1fr auto;gap:2px 10px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;border-inline-start:4px solid var(--pr)}
+.part .pn{font-weight:700}
+.part .pc{grid-column:1/-1;font-family:var(--mono);font-size:13px;direction:ltr;text-align:right;unicode-bidi:plaintext}
+.part .pw{grid-column:1/-1;font-size:13px;color:var(--muted)}
+.prio{font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--pr);color:#fff;align-self:start;white-space:nowrap}
+.pr-must{--pr:var(--accent)} .pr-rec{--pr:var(--cS2)} .pr-opt{--pr:var(--cC)} .pr-skip{--pr:var(--muted)}
+.pr-opt .prio{color:#1a1500}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{width:10px;height:10px;border-radius:2px;background:var(--pr);display:inline-block}
+.callout{border:1px dashed var(--line);border-radius:12px;padding:10px 12px;font-size:14px}
+.callout a{color:var(--accent)}
+bdi{unicode-bidi:isolate}
+@media (prefers-reduced-motion:no-preference){.sheet{animation:up .22s ease-out}@keyframes up{from{transform:translateY(30px);opacity:.6}}}
+</style>
+
+</head>
+<body>
+<noscript><div class="ios-note"><b>האפליקציה צריכה JavaScript.</b><br>פתחו אותה ב-Safari ולא בתצוגה מקדימה של "קבצים".</div></noscript>
+<div class="wrap">
+<header>
+  <h1>מוסך <span>הורייזן</span> 6</h1>
+  <p>בחרו סוג מרוץ ומחלקה, ונדרג לכם את הרכבים מתוך <b id="total"></b> הרכבים ברשימה הרשמית, יחד עם תוכנית שדרוג והגדרות כוונון התחלתיות.</p>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button class="tab" role="tab" id="t-build" aria-selected="true" data-v="build">הרכבה</button>
+  <button class="tab" role="tab" id="t-up" aria-selected="false" data-v="up">שדרוגים</button>
+  <button class="tab" role="tab" id="t-all" aria-selected="false" data-v="all">כל הרכבים</button>
+  <button class="tab" role="tab" id="t-mine" aria-selected="false" data-v="mine">המוסך שלי <small id="mineCount"></small></button>
+</nav>
+
+<section id="v-build">
+  <div><p class="lbl">סוג מרוץ</p><div class="chips" id="discs"></div></div>
+  <div><p class="lbl">מחלקת יעד</p><div class="chips" id="classes"></div></div>
+  <div class="toggles">
+    <label class="tg"><input type="checkbox" id="noDlc" checked> בלי רכבי DLC בתשלום</label>
+    <label class="tg"><input type="checkbox" id="noFe" checked> בלי Forza Edition (מגיעים עם בנייה קבועה)</label>
+    <label class="tg"><input type="checkbox" id="onlyMine"> רק רכבים שסימנתי שיש לי</label>
+  </div>
+  <div class="summary" id="sum"></div>
+  <ol class="list" id="results"></ol>
+  <p class="note">הדירוג מבוסס על סוג הרכב, ה-PI במצב מקורי והמרחק שלו מתקרת המחלקה. הרשימה הרשמית לא כוללת נתוני כוח, משקל והנעה, אז כדאי לבדוק 2–3 מהמובילים בנסיעת מבחן.</p>
+</section>
+
+<section id="v-up" hidden>
+  <div><p class="lbl">1 · בחרו רכב</p>
+    <input class="search" id="uq" type="search" placeholder="חפשו רכב, למשל Supra או GT-R" autocomplete="off">
+    <ul class="list picks" id="upPicks"></ul>
+    <div id="upCar"></div>
+  </div>
+  <div><p class="lbl">2 · קטגוריית נסיעה</p><div class="seg3" id="upCats"></div><div class="chips sub2" id="upSub"></div></div>
+  <div><p class="lbl">3 · מחלקת יעד</p><div class="chips" id="upClasses"></div></div>
+  <div id="upPlan"></div>
+</section>
+
+<section id="v-all" hidden>
+  <input class="search" id="q" type="search" placeholder="חיפוש: יצרן, דגם, שנה…" autocomplete="off">
+  <div class="chips" id="fclasses"></div>
+  <div class="summary" id="allSum"></div>
+  <ul class="list" id="allList"></ul>
+  <button class="more" id="moreBtn">הצג עוד</button>
+</section>
+
+<section id="v-mine" hidden>
+  <div class="summary">סמנו רכבים שכבר יש לכם במשחק (בכרטיס הרכב ← "יש לי"), ואז בלשונית הרכבה אפשר לסנן רק אותם. השמירה היא בדפדפן הזה בלבד.</div>
+  <ul class="list" id="mineList"></ul>
+</section>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" hidden><div class="sheet-in" id="sheetIn"></div></div>
+
+<script>
+const RAW={"t":["Buggies","Classic Muscle","Classic Racers","Classic Rally","Classic Sports Cars","Cult Cars","Drift Cars","Eclectic Domestics","Extreme Track Toys","GT Cars","Hot Hatch","Hypercars","Modern Muscle","Modern Rally","Modern Sports Cars","Modern Super Saloons","Modern Supercars","Offroad","Pickups & 4x4's","Rally Monsters","Rare Classics","Retro Hot Hatch","Retro Muscle","Retro Racers","Retro Rally","Retro Sports Cars","Retro Super Saloons","Retro Supercars","Rods and Customs","Sports Utility Heroes","Super GT","Super Hot Hatch","Track Toys","UTV's","Unlimited Buggies","Unlimited Offroad","Utility Heroes"],"c":[["Abarth",1968,"Abarth 595 esseesse",5,100,"Italy","Autoshow, Wheelspin"],["Abarth",1980,"Abarth Fiat 131",3,399,"Italy","Autoshow, Wheelspin"],["Abarth",2016,"Abarth 695 Biposto",10,540,"Italy","Seasonal"],["Abarth",2017,"Abarth 124 Spider",14,450,"Italy","Seasonal"],["Acura",2001,"Acura Integra Type R",21,471,"USA","Autoshow, Wheelspin"],["Acura",2002,"Acura RSX Type S",21,462,"USA","Autoshow, Wheelspin"],["Acura",2022,"Acura NSX Type S",16,734,"USA","Seasonal"],["Acura",2023,"Acura Integra A-Spec",10,484,"USA","Autoshow, Wheelspin"],["Alfa Romeo",1965,"Alfa Romeo Giulia Sprint GTA Stradale",20,379,"Italy","Autoshow, Wheelspin"],["Alfa Romeo",1965,"Alfa Romeo Giulia TZ2",2,532,"Italy","Collection Journal, Seasonal"],["Alfa Romeo",1968,"Alfa Romeo 33 Stradale",2,593,"Italy","Autoshow, Wheelspin"],["Alfa Romeo",1968,"Alfa Romeo Autodelta Tipo 33/2 Daytona",2,696,"Italy","Autoshow DLC Car Pass"],["Alfa Romeo",1990,"Alfa Romeo SE 048SP",23,978,"Italy","Autoshow DLC Italian Passion Car Pack"],["Alfa Romeo",1992,"Alfa Romeo 155 Q4",26,439,"Italy","Autoshow"],["Alfa Romeo",2007,"Alfa Romeo 8C Competizione",9,635,"Italy","Autoshow, Wheelspin"],["Alfa Romeo",2014,"Alfa Romeo 4C",14,644,"Italy","Autoshow"],["Alfa Romeo",2017,"Alfa Romeo Giulia Quadrifoglio",15,667,"Italy","Autoshow, Wheelspin"],["Alfa Romeo",2021,"Alfa Romeo Giulia GTAm",15,711,"Italy","Autoshow DLC Italian Passion Car Pack"],["Alumicraft",2015,"Alumicraft Class 10 Race Car",34,532,"USA","Autoshow, Wheelspin"],["Alumicraft",2021,"Alumicraft #122 Class 1 Buggy",34,571,"USA","Autoshow, Wheelspin"],["Alumicraft",2022,"Alumicraft #6165 Trick Truck",35,485,"USA","Autoshow, Wheelspin"],["AMG Transport Dynamics",2554,"AMG Transport Dynamics M12S Warthog CST",35,663,"USA","Autoshow, Collection Journal"],["Apollo",2019,"Apollo Intensa Emozione",8,916,"Germany","Wheelspin, Seasonal"],["Ariel",2013,"Ariel Atom 500 V8",8,825,"UK","Autoshow, Wheelspin"],["Ariel",2016,"Ariel Nomad",34,601,"UK","Autoshow, Collection Journal, Wheelspin"],["Aston Martin",1964,"Aston Martin DB5",20,416,"UK","Autoshow"],["Aston Martin",2003,"Aston Martin DB7 GT",25,566,"UK","Autoshow DLC Car Pass"],["Aston Martin",2016,"Aston Martin Vulcan",8,884,"UK","Autoshow, Wheelspin, Loyalty"],["Aston Martin",2017,"Aston Martin DB11",30,679,"UK","Autoshow, Wheelspin"],["Aston Martin",2017,"Aston Martin Vulcan AMR Pro",8,898,"UK","Autoshow, Wheelspin"],["Aston Martin",2019,"Aston Martin DBS Superleggera",30,736,"UK","Wheelspin, Seasonal"],["Aston Martin",2019,"Aston Martin Valhalla Concept Car",11,960,"UK","Wheelspin, Seasonal"],["Aston Martin",2019,"Aston Martin Vantage",9,696,"UK","Autoshow"],["Aston Martin",2021,"Aston Martin DBX",29,618,"UK","Seasonal"],["Aston Martin",2022,"Aston Martin Valkyrie AMR Pro",8,989,"UK","Autoshow, Collection Journal, Wheelspin"],["Aston Martin",2023,"Aston Martin Valkyrie",11,924,"UK","Autoshow, Wheelspin"],["Audi",1984,"Audi Sport quattro",24,526,"Germany","Wheelspin, Seasonal"],["Audi",1986,"Audi #2 Audi Sport quattro S1",19,726,"Germany","Autoshow, Wheelspin"],["Audi",2001,"Audi RS 4 Avant",26,544,"Germany","Autoshow, Wheelspin"],["Audi",2003,"Audi RS 6",26,556,"Germany","Autoshow, Wheelspin"],["Audi",2006,"Audi RS 4",15,593,"Germany","Autoshow, Wheelspin"],["Audi",2009,"Audi R8 LMS",8,810,"Germany","Autoshow, Wheelspin"],["Audi",2009,"Audi RS 6",15,598,"Germany","Autoshow, Wheelspin"],["Audi",2010,"Audi TT RS Coupé",14,593,"Germany","Autoshow, Wheelspin"],["Audi",2011,"Audi RS 3 Sportback",31,565,"Germany","Autoshow, Wheelspin"],["Audi",2011,"Audi RS 5 Coupé",15,613,"Germany","Autoshow, Wheelspin"],["Audi",2013,"Audi R8 Coupé V10 plus 5.2 FSI quattro",16,694,"Germany","Collection Journal, Seasonal"],["Audi",2013,"Audi RS 4 Avant",15,607,"Germany","Autoshow, Wheelspin"],["Audi",2013,"Audi RS 7 Sportback",15,619,"Germany","Autoshow, Wheelspin"],["Audi",2015,"Audi RS 6 Avant",15,640,"Germany","Autoshow, Wheelspin"],["Audi",2015,"Audi S1",10,527,"Germany","Autoshow, Wheelspin"],["Audi",2016,"Audi R8 V10 plus",16,731,"Germany","Autoshow, Wheelspin"],["Audi",2018,"Audi RS 4 Avant",15,637,"Germany","Autoshow, Wheelspin"],["Audi",2020,"Audi R8 V10 performance",16,738,"Germany","Autoshow, Wheelspin"],["Audi",2020,"Audi RS 3 Sedan",15,617,"Germany","Autoshow, Wheelspin"],["Audi",2021,"Audi RS 6 Avant",15,650,"Germany","Autoshow, Wheelspin"],["Audi",2021,"Audi RS 7 Sportback",15,655,"Germany","Autoshow, Wheelspin"],["Audi",2021,"Audi RS e-tron GT",15,677,"Germany","Autoshow, Wheelspin"],["Audi",2023,"Audi R8 Coupé V10 GT RWD",16,769,"Germany","Autoshow DLC Car Pass"],["Austin-Healey",1965,"Austin-Healey 3000 MkIII",4,352,"UK","Autoshow, Wheelspin"],["Autozam",1993,"Autozam AZ-1",7,342,"Japan","Autoshow, Wheelspin"],["BAC",2014,"BAC Mono",32,766,"UK","Autoshow, Wheelspin"],["Bentley",2016,"Bentley Bentayga",29,612,"UK","Wheelspin, Seasonal"],["Bentley",2021,"Bentley Continental GT Convertible",9,649,"UK","Autoshow, Collection Journal, Wheelspin"],["Bentley",2025,"Bentley Continental GT Speed",30,699,"UK","Seasonal"],["BMW",1957,"BMW Isetta 300 Export",5,100,"Germany","Autoshow, Wheelspin"],["BMW",1973,"BMW 2002 Turbo",4,424,"Germany","Autoshow, Wheelspin"],["BMW",1981,"BMW M1",27,510,"Germany","Treasure"],["BMW",1988,"BMW M3",26,474,"Germany","Autoshow, Wheelspin"],["BMW",1988,"BMW M5",26,470,"Germany","Autoshow, Wheelspin"],["BMW",1995,"BMW 850CSi",25,493,"Germany","Autoshow, Wheelspin"],["BMW",1995,"BMW M5",26,516,"Germany","Autoshow, Wheelspin"],["BMW",1997,"BMW M3",26,549,"Germany","Autoshow, Wheelspin"],["BMW",2003,"BMW M5",26,580,"Germany","Autoshow, Wheelspin"],["BMW",2005,"BMW M3",26,554,"Germany","Autoshow, Wheelspin"],["BMW",2008,"BMW M3",15,608,"Germany","Autoshow, Wheelspin"],["BMW",2008,"BMW Z4 M Coupé",14,579,"Germany","Autoshow, Wheelspin"],["BMW",2009,"BMW M5",15,595,"Germany","Autoshow, Wheelspin"],["BMW",2010,"BMW M3 GTS",32,678,"Germany","Autoshow, Wheelspin"],["BMW",2011,"BMW X5 M",29,546,"Germany","Autoshow, Wheelspin"],["BMW",2012,"BMW M5",15,652,"Germany","Autoshow, Wheelspin"],["BMW",2014,"BMW M4 Coupé",15,679,"Germany","Autoshow, Wheelspin"],["BMW",2015,"BMW i8",14,665,"Germany","Autoshow, Wheelspin"],["BMW",2016,"BMW M4 GTS",32,711,"Germany","Autoshow, Wheelspin"],["BMW",2019,"BMW Z4 Roadster",14,634,"Germany","Autoshow, Collection Journal, Wheelspin"],["BMW",2020,"BMW M2 Competition Coupé",15,656,"Germany","Wheelspin, Seasonal"],["BMW",2020,"BMW M8 Competition Coupé",9,684,"Germany","Autoshow, Wheelspin"],["BMW",2021,"BMW M4 Competition Coupé",15,666,"Germany","Autoshow, Wheelspin"],["BMW",2021,"BMW M4 Competition Coupé Welcome Pack",15,800,"Germany","Autoshow DLC Welcome Pack"],["BMW",2022,"BMW iX xDrive50",29,595,"Germany","Autoshow, Wheelspin"],["BMW",2022,"BMW M5 CS",15,731,"Germany","Autoshow, Wheelspin"],["BMW",2023,"BMW M2",15,647,"Germany","Autoshow, Wheelspin"],["BMW",2023,"BMW M2 Forza Edition",32,700,"Germany","Collection Journal, Seasonal"],["BMW",2024,"BMW X6 M Competition",29,672,"Germany","Autoshow, Wheelspin"],["BMW",2025,"BMW M4 CS",15,733,"Germany","Seasonal"],["Buick",1987,"Buick Regal GNX",22,454,"USA","Autoshow"],["Cadillac",2013,"Cadillac XTS Limousine",15,381,"USA","Autoshow, Wheelspin"],["Cadillac",2016,"Cadillac ATS-V",12,601,"USA","Autoshow, Wheelspin"],["Cadillac",2016,"Cadillac CTS-V Sedan",12,648,"USA","Autoshow, Wheelspin"],["Cadillac",2022,"Cadillac CT4-V Blackwing",12,650,"USA","Autoshow, Wheelspin"],["Cadillac",2022,"Cadillac CT5-V Blackwing",12,701,"USA","Autoshow, Wheelspin"],["Can-Am",2018,"Can-Am Maverick X RS Turbo R",33,568,"Canada","Autoshow, Wheelspin"],["Casey Currie Motorsports",2019,"Casey Currie Motorsports #4402 Ultra 4 'Trophy Jeep'",35,641,"USA","Wheelspin, Seasonal"],["Chevrolet",1953,"Chevrolet Corvette",4,270,"USA","Autoshow, Wheelspin"],["Chevrolet",1955,"Chevrolet 150 Utility Sedan",28,221,"USA","Autoshow, Wheelspin"],["Chevrolet",1957,"Chevrolet Bel Air",28,320,"USA","Autoshow, Wheelspin"],["Chevrolet",1960,"Chevrolet Corvette",4,428,"USA","Wheelspin, Seasonal"],["Chevrolet",1964,"Chevrolet Impala Super Sport 409",28,427,"USA","Autoshow, Wheelspin"],["Chevrolet",1967,"Chevrolet Corvette Stingray 427",1,510,"USA","Collection Journal, Seasonal"],["Chevrolet",1969,"Chevrolet Camaro Super Sport Coupe",1,471,"USA","Autoshow, Wheelspin"],["Chevrolet",1969,"Chevrolet Nova Super Sport 396",1,431,"USA","Autoshow, Wheelspin"],["Chevrolet",1970,"Chevrolet Camaro Z28",1,430,"USA","Autoshow, Wheelspin"],["Chevrolet",1970,"Chevrolet Chevelle Super Sport 454",1,424,"USA","Autoshow, Wheelspin"],["Chevrolet",1970,"Chevrolet Corvette ZR-1",1,497,"USA","Autoshow, Wheelspin"],["Chevrolet",1970,"Chevrolet El Camino Super Sport 454",36,430,"USA","Autoshow, Wheelspin"],["Chevrolet",1972,"Chevrolet K-10 Custom",18,268,"USA","Autoshow, Wheelspin"],["Chevrolet",1979,"Chevrolet Camaro Z28",1,364,"USA","Autoshow, Wheelspin"],["Chevrolet",1988,"Chevrolet Monte Carlo Super Sport",22,282,"USA","Autoshow, Wheelspin"],["Chevrolet",1995,"Chevrolet Corvette ZR-1",22,576,"USA","Autoshow, Wheelspin"],["Chevrolet",1996,"Chevrolet Impala Super Sport",22,407,"USA","Autoshow, Wheelspin"],["Chevrolet",2002,"Chevrolet Corvette Z06",22,602,"USA","Autoshow, Wheelspin"],["Chevrolet",2009,"Chevrolet Corvette ZR1",12,712,"USA","Autoshow, Wheelspin"],["Chevrolet",2015,"Chevrolet Camaro Z/28",32,695,"USA","Autoshow, Wheelspin"],["Chevrolet",2015,"Chevrolet Corvette Z06",12,755,"USA","Autoshow, Wheelspin"],["Chevrolet",2017,"Chevrolet Camaro ZL1",12,727,"USA","Autoshow, Wheelspin"],["Chevrolet",2018,"Chevrolet Camaro ZL1 1LE",32,728,"USA","Autoshow, Wheelspin"],["Chevrolet",2019,"Chevrolet Corvette ZR1",32,778,"USA","Wheelspin, Seasonal"],["Chevrolet",2020,"Chevrolet Corvette Stingray Coupe",16,700,"USA","Autoshow, Wheelspin"],["Chevrolet",2020,"Chevrolet Silverado LT Trail Boss",18,449,"USA","Autoshow, Wheelspin"],["Chevrolet",2023,"Chevrolet Corvette Z06",32,763,"USA","Autoshow, Wheelspin"],["Chevrolet",2024,"Chevrolet Corvette E-Ray",16,737,"USA","Autoshow, Wheelspin, Loyalty"],["Chevrolet",2024,"Chevrolet Camaro ZL1",12,718,"USA","Seasonal"],["Citroën",1970,"Citroën 2CV",5,100,"France","Treasure"],["Datsun",1969,"Datsun 2000 Roadster",4,323,"Japan","Seasonal"],["Datsun",1970,"Datsun 510",4,143,"Japan","Autoshow, Wheelspin"],["Datsun",1972,"Datsun #269 Attacking the Clock Racing 240Z 'All Carbon Hill Climb Beast'",8,951,"Japan","Autoshow DLC Car Pass"],["Datsun",1972,"Datsun 240Z #5 Rallye",3,538,"Japan","Autoshow DLC Car Pass"],["De Tomaso",1984,"De Tomaso Pantera GT5",27,562,"Italy","Seasonal"],["DeBerti",2013,"DeBerti Jeep Wrangler Unlimited",35,645,"USA","Autoshow, Wheelspin"],["DeBerti",2018,"DeBerti Chevrolet Silverado 1500 Drift Truck",6,707,"USA","Autoshow, Wheelspin"],["DeBerti",2018,"DeBerti Ford Mustang GT",12,733,"USA","Seasonal"],["DeBerti",2019,"DeBerti Ford Super Duty F-250 Lariat 'Transformer'",35,548,"USA","Autoshow, Wheelspin"],["DeBerti",2019,"DeBerti Toyota Tacoma TRD 'The Performance Truck'",6,717,"USA","Autoshow, Wheelspin"],["DeLorean",1982,"DeLorean DMC-12",25,357,"USA","Autoshow, Wheelspin"],["Dodge",1968,"Dodge Dart HEMI Super Stock",1,540,"USA","Wheelspin, Seasonal"],["Dodge",1969,"Dodge Charger Daytona HEMI",1,479,"USA","Autoshow, Collection Journal, Wheelspin"],["Dodge",1969,"Dodge Charger R/T",1,417,"USA","Treasure"],["Dodge",1970,"Dodge Challenger R/T",1,443,"USA","Wheelspin, Seasonal"],["Dodge",1970,"Dodge Coronet Super Bee",1,455,"USA","Autoshow, Wheelspin"],["Dodge",1999,"Dodge Viper GTS ACR",22,598,"USA","Autoshow"],["Dodge",1999,"Dodge Viper GTS ACR Forza Edition",35,700,"USA","Autoshow DLC VIP"],["Dodge",2006,"Dodge Ram SRT-10",12,547,"USA","Seasonal"],["Dodge",2008,"Dodge Viper SRT-10 ACR",32,735,"USA","Autoshow, Wheelspin"],["Dodge",2015,"Dodge Challenger SRT Hellcat",12,631,"USA","Autoshow, Wheelspin"],["Dodge",2015,"Dodge Charger SRT Hellcat",12,637,"USA","Autoshow, Wheelspin"],["Dodge",2016,"Dodge Viper ACR",32,786,"USA","Wheelspin, Seasonal"],["Dodge",2018,"Dodge Challenger SRT Demon",12,678,"USA","Autoshow, Collection Journal, Wheelspin"],["Dodge",2021,"Dodge Durango SRT Hellcat",29,628,"USA","Collection Journal, Seasonal"],["Dodge",2022,"Dodge Challenger SRT Super Stock",12,695,"USA","Autoshow, Wheelspin"],["Dodge",2023,"Dodge Challenger SRT Demon 170",12,683,"USA","Autoshow DLC Car Pass"],["Eunos",1990,"Eunos Cosmos",25,487,"Japan","Autoshow DLC Car Pass"],["Exomotive",2018,"Exomotive Exocet Sport V8 XP-5",32,841,"USA","Seasonal"],["Ferrari",1962,"Ferrari 250 GT Berlinetta Lusso",20,475,"Italy","Autoshow, Collection Journal"],["Ferrari",1962,"Ferrari 250 GTO",2,494,"Italy","Autoshow, Wheelspin"],["Ferrari",1967,"Ferrari #24 Ferrari Spa 330 P4",2,684,"Italy","Autoshow, Wheelspin"],["Ferrari",1967,"Ferrari 275 GTB4 Spider",20,579,"Italy","Autoshow DLC Italian Passion Car Pack"],["Ferrari",1969,"Ferrari Dino 246 GT",20,428,"Italy","Autoshow, Wheelspin"],["Ferrari",1970,"Ferrari 512 S",2,774,"Italy","Autoshow, Wheelspin"],["Ferrari",1984,"Ferrari 288 GTO",27,643,"Italy","Wheelspin, Seasonal"],["Ferrari",1987,"Ferrari F40",27,678,"Italy","Autoshow, Collection Journal"],["Ferrari",1989,"Ferrari F40 Competizione",23,948,"Italy","Autoshow, Wheelspin"],["Ferrari",1992,"Ferrari 512 TR",27,615,"Italy","Wheelspin, Seasonal"],["Ferrari",1994,"Ferrari F355 Berlinetta",27,588,"Italy","Wheelspin, Seasonal"],["Ferrari",1995,"Ferrari F50",27,678,"Italy","Autoshow, Wheelspin"],["Ferrari",1996,"Ferrari F50 GT",8,949,"Italy","Collection Journal, Seasonal"],["Ferrari",2002,"Ferrari Enzo Ferrari",27,755,"Italy","Autoshow"],["Ferrari",2005,"Ferrari FXX",8,900,"Italy","Autoshow, Wheelspin"],["Ferrari",2007,"Ferrari 430 Scuderia",16,702,"Italy","Autoshow, Wheelspin"],["Ferrari",2009,"Ferrari 458 Italia",16,721,"Italy","Autoshow, Wheelspin"],["Ferrari",2010,"Ferrari 599XX",8,840,"Italy","Autoshow, Wheelspin"],["Ferrari",2012,"Ferrari 599XX Evolution",8,894,"Italy","Wheelspin, Seasonal"],["Ferrari",2013,"Ferrari 458 Speciale",32,768,"Italy","Autoshow, Wheelspin"],["Ferrari",2013,"Ferrari LaFerrari",11,857,"Italy","Autoshow, Wheelspin"],["Ferrari",2014,"Ferrari FXX K",8,936,"Italy","Autoshow, Wheelspin"],["Ferrari",2015,"Ferrari 488 GTB",16,770,"Italy","Autoshow, Wheelspin"],["Ferrari",2015,"Ferrari F12tdf",30,788,"Italy","Autoshow, Wheelspin"],["Ferrari",2017,"Ferrari 812 Superfast",30,780,"Italy","Autoshow, Wheelspin"],["Ferrari",2017,"Ferrari J50",16,772,"Italy","Autoshow, Wheelspin"],["Ferrari",2017,"Ferrari J50 Preorder Car",16,800,"Italy","Autoshow DLC Preorder Bonus"],["Ferrari",2018,"Ferrari FXX-K Evo",8,957,"Italy","Autoshow, Wheelspin"],["Ferrari",2018,"Ferrari FXX-K Evo Welcome Pack",8,998,"Italy","Autoshow DLC Welcome Pack"],["Ferrari",2018,"Ferrari Portofino",30,714,"Italy","Autoshow, Wheelspin"],["Ferrari",2019,"Ferrari 488 Pista",32,803,"Italy","Autoshow, Wheelspin"],["Ferrari",2019,"Ferrari F8 Tributo",16,802,"Italy","Wheelspin, Seasonal"],["Ferrari",2019,"Ferrari Monza SP2",30,773,"Italy","Autoshow, Wheelspin"],["Ferrari",2020,"Ferrari Roma",30,735,"Italy","Seasonal"],["Ferrari",2020,"Ferrari SF90 Stradale",11,851,"Italy","Autoshow, Wheelspin"],["Ferrari",2022,"Ferrari 296 GTB",16,811,"Italy","Seasonal"],["Ferrari",2024,"Ferrari Purosangue",29,713,"Italy","Autoshow DLC Car Pass"],["Ferrari",2025,"Ferrari F80",11,916,"Italy","Autoshow DLC Italian Passion Car Pack"],["Ford",1932,"Ford De Luxe Five-Window Coupe",28,100,"USA","Autoshow, Wheelspin"],["Ford",1957,"Ford Thunderbird",28,332,"USA","Autoshow DLC Car Pass"],["Ford",1965,"Ford Mustang GT Coupe",1,388,"USA","Autoshow"],["Ford",1966,"Ford #2 GT40 Mk II",2,666,"USA","Autoshow, Wheelspin"],["Ford",1968,"Ford Mustang GT 2+2 Fastback",1,394,"USA","Autoshow, Wheelspin"],["Ford",1968,"Ford Mustang GT 2+2 Fastback Forza Edition",6,700,"USA","Wheelspin, Seasonal"],["Ford",1969,"Ford Mustang Boss 302",1,468,"USA","Autoshow, Wheelspin"],["Ford",1973,"Ford Capri RS3100",4,394,"USA","Autoshow, Wheelspin"],["Ford",1973,"Ford XB Falcon GT",1,422,"USA","Autoshow, Wheelspin"],["Ford",1977,"Ford #5 Escort RS1800 MkII",3,544,"USA","Autoshow, Wheelspin"],["Ford",1985,"Ford RS200 Evolution",19,710,"USA","Seasonal"],["Ford",1986,"Ford F-150 XLT Lariat",18,263,"USA","Autoshow, Wheelspin"],["Ford",1986,"Ford F-150 XLT Lariat Forza Edition",6,850,"USA","Wheelspin, Seasonal"],["Ford",1987,"Ford Sierra Cosworth RS500",26,484,"USA","Collection Journal"],["Ford",1992,"Ford Escort RS Cosworth",24,456,"USA","Autoshow, Wheelspin"],["Ford",1993,"Ford Mustang SVT Cobra R",22,432,"USA","Autoshow, Wheelspin"],["Ford",1994,"Ford Supervan 3",32,740,"USA","Autoshow, Wheelspin"],["Ford",1999,"Ford Racing Puma",24,401,"USA","Autoshow, Wheelspin"],["Ford",2000,"Ford Mustang SVT Cobra R",22,528,"USA","Autoshow, Wheelspin"],["Ford",2001,"Ford #4 Ford Focus RS",19,639,"USA","Autoshow, Wheelspin"],["Ford",2003,"Ford F-150 SVT Lightning",18,474,"USA","Seasonal"],["Ford",2003,"Ford Focus RS",21,484,"USA","Autoshow, Wheelspin"],["Ford",2005,"Ford GT",27,676,"USA","Treasure"],["Ford",2009,"Ford Focus RS",31,551,"USA","Autoshow"],["Ford",2010,"Ford Crown Victoria Police Interceptor",22,354,"USA","Autoshow, Wheelspin"],["Ford",2011,"Ford Transit SuperSportVan",36,235,"USA","Autoshow, Wheelspin"],["Ford",2013,"Ford Mustang Shelby GT500",12,647,"USA","Autoshow, Wheelspin"],["Ford",2014,"Ford #11 Rockstar F-150 Trophy Truck",35,613,"USA","Autoshow, Wheelspin"],["Ford",2014,"Ford FPV Limited Edition Pursuit Ute",36,563,"USA","Autoshow, Wheelspin"],["Ford",2014,"Ford Ranger T6 Rally Raid",17,530,"USA","Wheelspin, Seasonal"],["Ford",2016,"Ford Mustang Shelby GT350R",32,721,"USA","Autoshow, Wheelspin"],["Ford",2017,"Ford #14 Rahal Letterman Lanigan Racing Fiesta",19,772,"USA","Autoshow, Collection Journal"],["Ford",2017,"Ford #25 'Brocky' Ultra4 Bronco RTR",35,644,"USA","Autoshow, Collection Journal"],["Ford",2017,"Ford Focus RS",31,588,"USA","Autoshow, Collection Journal"],["Ford",2017,"Ford GT",16,757,"USA","Autoshow, Wheelspin"],["Ford",2017,"Ford M-Sport Fiesta RS",19,707,"USA","Wheelspin, Seasonal"],["Ford",2018,"Ford Mustang RTR Spec 5",12,648,"USA","Autoshow, Wheelspin"],["Ford",2020,"Ford #2069 Ford Performance Bronco R",17,441,"USA","Autoshow, Wheelspin"],["Ford",2020,"Ford Mustang Shelby GT500",12,734,"USA","Autoshow, Wheelspin"],["Ford",2020,"Ford Super Duty F-450 DRW PLATINUM",18,379,"USA","Autoshow, Wheelspin"],["Ford",2020,"Ford Super Duty F-450 DRW PLATINUM Forza Edition",18,700,"USA","Wheelspin, Seasonal"],["Ford",2022,"Ford Bronco Raptor",18,473,"USA","Autoshow, Wheelspin"],["Ford",2022,"Ford F-150 Lightning",18,500,"USA","Wheelspin, Seasonal"],["Ford",2022,"Ford Focus ST",10,594,"USA","Autoshow, Wheelspin"],["Ford",2022,"Ford Supervan 4",8,919,"USA","Collection Journal, Seasonal"],["Ford",2023,"Ford F-150 Raptor R",18,536,"USA","Autoshow, Wheelspin"],["Ford",2023,"Ford F-150 Raptor R Welcome Pack",18,600,"USA","Autoshow DLC Welcome Pack"],["Ford",2023,"Ford Fiesta ST",10,500,"USA","Autoshow, Wheelspin"],["Ford",2024,"Ford Mustang Dark Horse",12,669,"USA","Autoshow, Collection Journal"],["Ford",2024,"Ford Mustang GT",12,628,"USA","Autoshow, Wheelspin"],["Formula Drift",1989,"Formula Drift #98 BMW 325i",6,726,"USA","Autoshow, Wheelspin"],["Formula Drift",1995,"Formula Drift #34 Toyota Supra MkIV",6,759,"USA","Autoshow, Wheelspin"],["Formula Drift",1997,"Formula Drift #777 Nissan 240SX",6,748,"USA","Autoshow, Collection Journal"],["Formula Drift",2006,"Formula Drift #43 Dodge Viper SRT-10 ACR",6,748,"USA","Wheelspin, Seasonal"],["Formula Drift",2007,"Formula Drift #117 599 GTB Fiorano",6,767,"USA","Autoshow, Collection Journal"],["Formula Drift",2009,"Formula Drift #99 Mazda RX-8",6,737,"USA","Autoshow, Collection Journal"],["Formula Drift",2013,"Formula Drift #777 Chevrolet Corvette",6,760,"USA","Autoshow, Wheelspin"],["Formula Drift",2015,"Formula Drift #13 Ford Mustang",6,739,"USA","Wheelspin, Seasonal"],["Formula Drift",2016,"Formula Drift #530 HSV Maloo GEN-F",6,710,"USA","Autoshow, Wheelspin"],["Formula Drift",2019,"Formula Drift #411 Toyota Corolla Hatchback",6,754,"USA","Autoshow, Wheelspin"],["Formula Drift",2020,"Formula Drift #151 Toyota GR Supra",6,779,"USA","Autoshow, Wheelspin"],["Formula Drift",2020,"Formula Drift #91 BMW M2",6,748,"USA","Autoshow, Wheelspin"],["Formula Drift",2023,"Formula Drift #64 Forsberg Racing Nissan Z",6,783,"USA","Autoshow, Wheelspin"],["Funco Motorsports",2018,"Funco Motorsports F9",34,752,"USA","Collection Journal, Seasonal"],["Ginetta",2019,"Ginetta G40 Junior",32,560,"UK","Seasonal"],["GMC",1970,"GMC Jimmy",18,416,"USA","Autoshow"],["GMC",1991,"GMC Syclone",18,446,"USA","Autoshow, Wheelspin"],["GMC",1992,"GMC Typhoon",29,435,"USA","Autoshow, Wheelspin"],["GMC",2022,"GMC HUMMER EV Pickup",18,610,"USA","Autoshow, Wheelspin"],["Gordon Murray Automotive",2020,"Gordon Murray Automotive T.50",11,871,"UK","Autoshow, Collection Journal"],["GR",2025,"GR GT Prototype",30,771,"Japan","Autoshow, Wheelspin"],["Hennessey",2012,"Hennessey Venom GT",11,845,"USA","Wheelspin, Seasonal"],["Hennessey",2019,"Hennessey Ford F-150 VelociRaptor 6X6",18,520,"USA","Autoshow, Wheelspin"],["Hennessey",2021,"Hennessey Venom F5",11,870,"USA","Autoshow, Wheelspin"],["Holden",1968,"Holden Monaro GTS 327",1,366,"Australia","Seasonal"],["Holden",1977,"Holden Torana A9X",1,413,"Australia","Autoshow, Wheelspin"],["Honda",1970,"Honda S800",5,134,"Japan","Autoshow, Wheelspin"],["Honda",1970,"Honda N600",7,100,"Japan","Seasonal"],["Honda",1972,"Honda Z GT",7,100,"Japan","Autoshow DLC Car Pass"],["Honda",1974,"Honda Civic RS",21,254,"Japan","Collection Journal, Seasonal"],["Honda",1984,"Honda City E II",7,203,"Japan","Autoshow, Collection Journal, Wheelspin"],["Honda",1984,"Honda Civic CRX Mugen",25,390,"Japan","Collection Journal, Seasonal"],["Honda",1986,"Honda Civic Si",21,253,"Japan","Autoshow"],["Honda",1990,"Honda #19 101 Motorsport CRX WTAC",8,877,"Japan","Autoshow DLC Time Attack Car Pack"],["Honda",1991,"Honda Beat",7,283,"Japan","Autoshow, Collection Journal, Wheelspin"],["Honda",1991,"Honda CR-X SiR",21,465,"Japan","Seasonal"],["Honda",1992,"Honda #21 Hardrace/JDMYard Civic WTAC",8,913,"Japan","Autoshow DLC Time Attack Car Pack"],["Honda",1992,"Honda NSX-R",25,572,"Japan","Autoshow, Wheelspin"],["Honda",1994,"Honda Acty",7,100,"Japan","Autoshow, Collection Journal, Wheelspin"],["Honda",1994,"Honda Prelude Si",21,410,"Japan","Autoshow, Collection Journal, Wheelspin"],["Honda",1997,"Honda Civic Type R",21,430,"Japan","Autoshow, Wheelspin"],["Honda",2001,"Honda #33 Integra WTAC",8,860,"Japan","Autoshow DLC Time Attack Car Pack"],["Honda",2003,"Honda S2000",14,503,"Japan","Autoshow, Wheelspin"],["Honda",2004,"Honda #52 Evasive Motorsports S2000 WTAC",8,888,"Japan","Autoshow DLC Time Attack Car Pack"],["Honda",2004,"Honda Civic Type R",21,480,"Japan","Autoshow, Wheelspin"],["Honda",2005,"Honda NSX-R",25,570,"Japan","Autoshow, Collection Journal"],["Honda",2005,"Honda NSX-R GT",25,608,"Japan","Collection Journal"],["Honda",2007,"Honda Civic Type R",10,454,"Japan","Autoshow, Wheelspin"],["Honda",2008,"Honda Civic Type R (FD2)",26,514,"Japan","Autoshow DLC Car Pass"],["Honda",2015,"Honda Civic Type R",31,585,"Japan","Autoshow, Wheelspin"],["Honda",2015,"Honda Ridgeline Baja Trophy Truck",35,580,"Japan","Autoshow, Wheelspin"],["Honda",2018,"Honda Civic Type R",31,608,"Japan","Autoshow, Wheelspin"],["Honda",2000,"Honda Prelude Type SH",25,455,"Japan","Seasonal"],["Honda",2022,"Honda e",10,398,"Japan","Autoshow, Wheelspin"],["Honda",2023,"Honda Civic Type R",31,620,"Japan","Autoshow, Collection Journal, Wheelspin"],["HSV",2014,"HSV GEN-F GTS",12,601,"Australia","Autoshow, Wheelspin"],["HSV",2014,"HSV Limited Edition GEN-F GTS Maloo",36,629,"Australia","Autoshow, Wheelspin"],["Hyundai",2019,"Hyundai Veloster N",31,532,"Korea","Autoshow, Wheelspin"],["Hyundai",2020,"Hyundai i30 N",31,553,"Korea","Autoshow, Wheelspin"],["Hyundai",2021,"Hyundai i20 N",10,564,"Korea","Autoshow, Wheelspin"],["Hyundai",2022,"Hyundai N Vision 74",32,692,"Korea","Autoshow, Wheelspin"],["Hyundai",2023,"Hyundai IONIQ 5 N",29,657,"Korea","Autoshow, Wheelspin"],["Jaguar",1956,"Jaguar D-Type",2,506,"UK","Autoshow, Wheelspin"],["Jaguar",1961,"Jaguar E-type",20,414,"UK","Wheelspin, Seasonal"],["Jaguar",1964,"Jaguar Lightweight E-Type",2,568,"UK","Autoshow, Wheelspin"],["Jaguar",1990,"Jaguar XJ-S",5,491,"UK","Autoshow"],["Jaguar",1990,"Jaguar XJ-S Forza Edition",6,750,"UK","Collection Journal"],["Jaguar",1991,"Jaguar Sport XJR-15",27,716,"UK","Autoshow, Collection Journal"],["Jaguar",1993,"Jaguar XJ220",27,676,"UK","Autoshow, Wheelspin"],["Jaguar",1993,"Jaguar XJ220S TWR",27,750,"UK","Autoshow, Wheelspin"],["Jaguar",2010,"Jaguar C-X75",16,810,"UK","Autoshow, Wheelspin"],["Jaguar",2015,"Jaguar XKR-S GT",32,671,"UK","Seasonal"],["Jeep",2012,"Jeep Wrangler Rubicon",18,350,"USA","Autoshow, Wheelspin"],["Jeep",2016,"Jeep Trailcat",35,635,"USA","Autoshow, Wheelspin"],["Jeep",2018,"Jeep Grand Cherokee Trackhawk",29,631,"USA","Autoshow, Wheelspin"],["Jeep",2020,"Jeep JT",18,336,"USA","Autoshow, Wheelspin"],["Jimco",2019,"Jimco #240 Fastball Racing Class 6100 Spec Trophy Truck",35,511,"USA","Autoshow, Wheelspin"],["Jimco",2020,"Jimco #179 Hammerhead Class 1",34,652,"USA","Autoshow, Wheelspin"],["Koenigsegg",2008,"Koenigsegg CCGT",8,900,"Sweden","Autoshow, Wheelspin"],["Koenigsegg",2011,"Koenigsegg Agera",11,810,"Sweden","Autoshow, Wheelspin"],["Koenigsegg",2015,"Koenigsegg One:1",11,890,"Sweden","Wheelspin, Seasonal"],["Koenigsegg",2016,"Koenigsegg Regera",11,886,"Sweden","Autoshow"],["Koenigsegg",2017,"Koenigsegg Agera RS",11,890,"Sweden","Autoshow, Collection Journal"],["Koenigsegg",2020,"Koenigsegg Jesko",11,899,"Sweden","Autoshow, Wheelspin"],["Koenigsegg",2024,"Koenigsegg Gemera",11,900,"Sweden","Autoshow DLC Car Pass"],["KTM",2018,"KTM X-Bow GT4",8,749,"Austria","Autoshow, Wheelspin"],["Lamborghini",1967,"Lamborghini Miura P400",20,505,"Italy","Autoshow, Wheelspin"],["Lamborghini",1973,"Lamborghini Espada 400 GT",27,477,"Italy","Seasonal"],["Lamborghini",1988,"Lamborghini Countach LP5000 QV",27,622,"Italy","Seasonal"],["Lamborghini",1997,"Lamborghini Diablo SV",27,649,"Italy","Collection Journal"],["Lamborghini",1999,"Lamborghini Diablo GTR",8,823,"Italy","Wheelspin, Seasonal"],["Lamborghini",2010,"Lamborghini Murciélago LP 670-4 SV",16,707,"Italy","Autoshow, Wheelspin"],["Lamborghini",2011,"Lamborghini Sesto Elemento",8,871,"Italy","Wheelspin, Seasonal"],["Lamborghini",2012,"Lamborghini Aventador LP700-4",11,753,"Italy","Wheelspin, Seasonal"],["Lamborghini",2012,"Lamborghini Gallardo LP570-4 Spyder Performante",16,685,"Italy","Autoshow, Wheelspin"],["Lamborghini",2013,"Lamborghini Veneno",11,834,"Italy","Autoshow, Wheelspin"],["Lamborghini",2014,"Lamborghini Huracán LP 610-4",16,738,"Italy","Autoshow, Wheelspin, Loyalty"],["Lamborghini",2016,"Lamborghini Centenario LP 770-4",11,792,"Italy","Autoshow, Wheelspin, Loyalty"],["Lamborghini",2018,"Lamborghini Aventador SVJ",11,794,"Italy","Autoshow, Wheelspin"],["Lamborghini",2019,"Lamborghini Urus",29,659,"Italy","Autoshow, Collection Journal"],["Lamborghini",2020,"Lamborghini Essenza SCV12",8,911,"Italy","Autoshow, Wheelspin"],["Lamborghini",2020,"Lamborghini Huracán EVO",16,761,"Italy","Seasonal"],["Lamborghini",2020,"Lamborghini Huracán STO",32,783,"Italy","Autoshow, Wheelspin"],["Lamborghini",2020,"Lamborghini Sián Roadster",11,797,"Italy","Autoshow, Wheelspin"],["Lamborghini",2021,"Lamborghini Countach LPI 800-4",11,773,"Italy","Autoshow, Wheelspin"],["Lamborghini",2022,"Lamborghini Aventador LP 780-4 Ultimae",11,794,"Italy","Seasonal"],["Lamborghini",2022,"Lamborghini Huracán EVO Spyder",16,757,"Italy","Seasonal"],["Lamborghini",2022,"Lamborghini Huracán Sterrato",19,738,"Italy","Collection Journal, Seasonal"],["Lamborghini",2022,"Lamborghini Huracán Tecnica",16,747,"Italy","Autoshow, Wheelspin"],["Lamborghini",2024,"Lamborghini Temerario",11,801,"Italy","Seasonal"],["Lamborghini",2024,"Lamborghini Revuelto",11,829,"Italy","Autoshow, Collection Journal"],["Lancia",1974,"Lancia Stratos HF Stradale",3,483,"Italy","Treasure"],["Lancia",1982,"Lancia 037 Stradale",24,555,"Italy","Seasonal"],["Lancia",1986,"Lancia Delta S4",24,564,"Italy","Autoshow, Wheelspin"],["Lancia",1992,"Lancia Delta HF Integrale EVO",24,489,"Italy","Autoshow, Wheelspin"],["Land Rover",2015,"Land Rover Range Rover Sport SVR",29,604,"UK","Autoshow, Collection Journal"],["Land Rover",2020,"Land Rover Defender 110 X",29,427,"UK","Autoshow"],["Lexus",2010,"Lexus LFA",16,699,"USA","Autoshow"],["Lexus",2010,"Lexus LFA Forza Edition",8,900,"USA","Collection Journal, Seasonal"],["Lexus",2015,"Lexus RC F",15,623,"USA","Autoshow, Wheelspin"],["Lexus",2021,"Lexus LC 500",9,592,"USA","Autoshow, Wheelspin"],["Lincoln",1962,"Lincoln Continental",28,267,"USA","Collection Journal"],["Lotus",1997,"Lotus Elise GT1",27,709,"UK","Autoshow, Wheelspin"],["Lotus",1999,"Lotus Elise Series 1 Sport 190",25,589,"UK","Autoshow, Wheelspin"],["Lotus",2002,"Lotus Esprit V8",27,619,"UK","Seasonal"],["Lotus",2018,"Lotus Exige Cup 430",32,732,"UK","Seasonal"],["Lotus",2018,"Lotus Scura Motorsports Exige WTAC",8,998,"UK","Collection Journal, Seasonal"],["Lotus",2020,"Lotus Evija",11,937,"UK","Autoshow, Wheelspin"],["Lotus",2020,"Lotus Evija Forza Edition",6,900,"UK","Autoshow DLC VIP"],["Lotus",2023,"Lotus Emira",14,656,"UK","Seasonal"],["Lucid",2024,"Lucid Air Sapphire",15,820,"USA","Autoshow, Wheelspin"],["Maserati",1997,"Maserati Ghibli Cup",25,591,"Italy","Autoshow, Collection Journal"],["Maserati",2004,"Maserati MC12",27,751,"Italy","Seasonal"],["Maserati",2008,"Maserati MC12 Versione Corsa",8,912,"Italy","Autoshow, Wheelspin"],["Maserati",2022,"Maserati MC20",16,753,"Italy","Autoshow, Wheelspin"],["Mazda",1972,"Mazda Cosmo 110S Series II",4,394,"Japan","Seasonal"],["Mazda",1973,"Mazda RX-3",4,328,"Japan","Autoshow, Wheelspin"],["Mazda",1973,"Mazda RX-3 Forza Edition",4,600,"Japan","Aftermarket"],["Mazda",1974,"Mazda #123 Mad Mike 808 Wagon 'FURSTY'",6,702,"Japan","Autoshow DLC Car Pass"],["Mazda",1985,"Mazda RX-7 GSL-SE",25,357,"Japan","Treasure"],["Mazda",1990,"Mazda Savanna RX-7",25,451,"Japan","Autoshow, Wheelspin"],["Mazda",1991,"Mazda #55 Mazda 787B",23,988,"Japan","Collection Journal"],["Mazda",1992,"Mazda RX-7 Type R",25,548,"Japan","Autoshow, Collection Journal"],["Mazda",1994,"Mazda MX-5 Miata",25,329,"Japan","Autoshow, Wheelspin"],["Mazda",1994,"Mazda MX-5 Miata Forza Edition",25,850,"Japan","Aftermarket"],["Mazda",2005,"Mazda Mazdaspeed MX-5",25,469,"Japan","Autoshow, Wheelspin"],["Mazda",2008,"Mazda Furai",8,926,"Japan","Seasonal"],["Mazda",2010,"Mazda Mazdaspeed 3",10,536,"Japan","Autoshow, Wheelspin"],["Mazda",2011,"Mazda RX-8 R3",14,508,"Japan","Autoshow, Wheelspin"],["Mazda",2013,"Mazda MX-5",14,432,"Japan","Autoshow, Wheelspin"],["Mazda",2016,"Mazda MX-5",14,499,"Japan","Autoshow"],["Mazda",2017,"Mazda MX-5 Cup",32,586,"Japan","Autoshow, Collection Journal"],["Mazda",2022,"Mazda MX-5 Miata RF",14,509,"Japan","Autoshow, Wheelspin"],["McLaren",1993,"McLaren F1",27,713,"UK","Autoshow, Wheelspin"],["McLaren",1997,"McLaren F1 GT",27,769,"UK","Autoshow, Wheelspin"],["McLaren",2011,"McLaren 12C Coupé",16,727,"UK","Autoshow, Wheelspin"],["McLaren",2013,"McLaren P1",11,848,"UK","Autoshow, Wheelspin"],["McLaren",2014,"McLaren 650S Spider",16,765,"UK","Autoshow, Wheelspin"],["McLaren",2015,"McLaren 570S Coupé",16,721,"UK","Autoshow, Wheelspin"],["McLaren",2018,"McLaren 600LT Coupé",32,780,"UK","Autoshow"],["McLaren",2019,"McLaren Speedtail",11,835,"UK","Autoshow, Wheelspin"],["McLaren",2021,"McLaren 620R",32,773,"UK","Wheelspin, Seasonal"],["McLaren",2021,"McLaren 765LT Coupé",32,829,"UK","Autoshow, Wheelspin"],["McLaren",2021,"McLaren Sabre",11,787,"UK","Seasonal"],["McLaren",2023,"McLaren Artura",16,766,"UK","Autoshow, Wheelspin"],["McLaren",2025,"McLaren W1",11,918,"UK","Autoshow DLC Car Pass"],["Mercedes-AMG",2015,"Mercedes-AMG GT S",30,691,"Germany","Autoshow, Wheelspin"],["Mercedes-AMG",2016,"Mercedes-AMG C 63 S Coupé",15,645,"Germany","Autoshow, Wheelspin"],["Mercedes-AMG",2017,"Mercedes-AMG GT R",30,764,"Germany","Seasonal"],["Mercedes-AMG",2018,"Mercedes-AMG E 63 S",15,674,"Germany","Autoshow, Wheelspin"],["Mercedes-AMG",2018,"Mercedes-AMG GT 4-Door Coupé",15,664,"Germany","Wheelspin, Seasonal"],["Mercedes-AMG",2020,"Mercedes-AMG GT Black Series",32,782,"Germany","Autoshow, Wheelspin"],["Mercedes-AMG",2020,"Mercedes-AMG GT Black Series Welcome Pack",32,900,"Germany","Autoshow DLC Welcome Pack"],["Mercedes-AMG",2020,"Mercedes-AMG SLC 43 Final Edition",14,620,"Germany","Autoshow, Wheelspin"],["Mercedes-AMG",2021,"Mercedes-AMG Mercedes-AMG ONE",11,900,"Germany","Autoshow, Wheelspin"],["Mercedes-AMG",2021,"Mercedes-AMG SL 63",9,690,"Germany","Autoshow, Wheelspin"],["Mercedes-AMG",2024,"Mercedes-AMG GT 63 4Matic+",30,742,"Germany","Autoshow DLC Car Pass"],["Mercedes-Benz",1954,"Mercedes-Benz 300 SL Coupé",20,388,"Germany","Autoshow, Wheelspin"],["Mercedes-Benz",1955,"Mercedes-Benz 300 SLR",2,599,"Germany","Autoshow, Wheelspin"],["Mercedes-Benz",1987,"Mercedes-Benz AMG Hammer Coupe",26,565,"Germany","Autoshow, Wheelspin"],["Mercedes-Benz",1990,"Mercedes-Benz 190 E 2.5-16 Evolution II",26,460,"Germany","Autoshow"],["Mercedes-Benz",1990,"Mercedes-Benz 190 E 2.5-16 Evolution II Forza Edition",32,700,"Germany","Wheelspin, Seasonal"],["Mercedes-Benz",1998,"Mercedes-Benz AMG CLK GTR",27,713,"Germany","Wheelspin, Seasonal"],["Mercedes-Benz",2009,"Mercedes-Benz SL 65 AMG Black Series",30,699,"Germany","Autoshow, Wheelspin"],["Mercedes-Benz",2012,"Mercedes-Benz C 63 AMG Coupé Black Series",15,654,"Germany","Autoshow"],["Mercedes-Benz",2013,"Mercedes-Benz A 45 AMG",31,582,"Germany","Autoshow, Wheelspin"],["Mercedes-Benz",2013,"Mercedes-Benz G 65 AMG",18,530,"Germany","Autoshow, Collection Journal"],["Mercedes-Benz",2014,"Mercedes-Benz G 63 AMG 6x6",18,489,"Germany","Wheelspin, Seasonal"],["Mercedes-Benz",2014,"Mercedes-Benz Unimog U5023",17,100,"Germany","Autoshow, Wheelspin"],["Mercedes-Benz",2018,"Mercedes-Benz X-Class",18,258,"Germany","Autoshow, Wheelspin"],["Meyers",1971,"Meyers Manx",0,201,"USA","Autoshow, Wheelspin"],["Meyers",2023,"Meyers Manx 2.0",0,540,"USA","Autoshow, Wheelspin"],["MG",1986,"MG Metro 6R4",19,627,"UK","Autoshow, Collection Journal, Wheelspin"],["MINI",1965,"MINI Cooper S",3,158,"UK","Autoshow, Wheelspin"],["MINI",2012,"MINI John Cooper Works GP",10,509,"UK","Autoshow, Wheelspin"],["MINI",2013,"MINI X-Raid All4 Racing Countryman",17,523,"UK","Autoshow, Wheelspin"],["MINI",2018,"MINI X-Raid John Cooper Works Buggy",17,514,"UK","Collection Journal, Seasonal"],["MINI",2021,"MINI John Cooper Works GP",31,599,"UK","Seasonal"],["Mitsubishi",1988,"Mitsubishi Starion ESI-R",25,446,"Japan","Seasonal"],["Mitsubishi",1990,"Mitsubishi #269 Attacking the Clock Racing Minicab Time Attack",32,166,"Japan","Autoshow DLC Time Attack Car Pack"],["Mitsubishi",1992,"Mitsubishi Galant VR-4",24,431,"Japan","Autoshow, Wheelspin"],["Mitsubishi",1995,"Mitsubishi Eclipse GSX",25,436,"Japan","Autoshow, Wheelspin"],["Mitsubishi",1995,"Mitsubishi Lancer Evolution III GSR",24,518,"Japan","Treasure"],["Mitsubishi",1995,"Mitsubishi Montero Exceed 2800 TD",18,190,"Japan","Autoshow, Wheelspin"],["Mitsubishi",1997,"Mitsubishi GTO",25,495,"Japan","Autoshow, Wheelspin"],["Mitsubishi",1997,"Mitsubishi Montero Evolution",18,346,"Japan","Collection Journal"],["Mitsubishi",2001,"Mitsubishi Lancer Evolution VI GSR TM Edition",24,574,"Japan","Autoshow"],["Mitsubishi",2004,"Mitsubishi Lancer Evolution VIII MR",13,555,"Japan","Autoshow, Wheelspin"],["Mitsubishi",2004,"Mitsubishi Lancer Evolution VIII MR Welcome Pack",13,700,"Japan","Autoshow DLC Welcome Pack"],["Mitsubishi",2005,"Mitsubishi #1 Sierra Sierra Enterprises Lancer Evolution Time Attack",8,962,"Japan","Collection Journal"],["Mitsubishi",2006,"Mitsubishi Lancer Evolution IX MR",13,521,"Japan","Seasonal"],["Mitsubishi",2008,"Mitsubishi Lancer Evolution X GSR",13,534,"Japan","Autoshow, Wheelspin"],["Nissan",1969,"Nissan Fairlady Z 432",4,369,"Japan","Autoshow, Wheelspin"],["Nissan",1971,"Nissan Skyline 2000GT-R",4,380,"Japan","Collection Journal"],["Nissan",1972,"Nissan Patrol",17,157,"Japan","Autoshow DLC Car Pass"],["Nissan",1973,"Nissan Skyline H/T 2000GT-R",4,407,"Japan","Autoshow, Wheelspin"],["Nissan",1983,"Nissan #11 Tomica Skyline Turbo Super Silhouette",23,847,"Japan","Collection Journal"],["Nissan",1983,"Nissan Skyline 2000 Turbo RS",25,414,"Japan","Autoshow DLC Car Pass"],["Nissan",1985,"Nissan Safari Turbo",18,123,"Japan","Treasure"],["Nissan",1987,"Nissan Be-1",7,175,"Japan","Seasonal"],["Nissan",1987,"Nissan Skyline GTS-R",25,432,"Japan","Autoshow"],["Nissan",1989,"Nissan PAO",7,145,"Japan","Collection Journal"],["Nissan",1989,"Nissan S-Cargo",7,131,"Japan","Autoshow, Wheelspin"],["Nissan",1989,"Nissan S-Cargo Forza Edition",32,800,"Japan","Wheelspin, Seasonal"],["Nissan",1989,"Nissan Silvia K's",25,455,"Japan","Autoshow"],["Nissan",1990,"Nissan #12 Skyline GT-R (BNR32 Gr.A) JTC",23,858,"Japan","Autoshow DLC Car Pass"],["Nissan",1990,"Nissan Pulsar GTI-R",24,486,"Japan","Autoshow, Wheelspin"],["Nissan",1991,"Nissan Figaro",7,234,"Japan","Treasure"],["Nissan",1992,"Nissan Skyline GT-R",25,541,"Japan","Autoshow, Wheelspin"],["Nissan",1993,"Nissan #32 Skyline WTAC 'Xtreme GTR'",8,923,"Japan","Autoshow DLC Time Attack Car Pack"],["Nissan",1993,"Nissan 240SX",25,339,"Japan","Wheelspin, Seasonal"],["Nissan",1994,"Nissan Fairlady Z Version S Twin Turbo",25,497,"Japan","Autoshow"],["Nissan",1994,"Nissan Silvia K's",25,499,"Japan","Autoshow, Wheelspin"],["Nissan",1995,"Nissan Gloria Gran Turismo",26,498,"Japan","Autoshow, Wheelspin"],["Nissan",1995,"Nissan NISMO GT-R LM",25,545,"Japan","Autoshow, Wheelspin"],["Nissan",1997,"Nissan Skyline GT-R V-Spec",25,555,"Japan","Seasonal"],["Nissan",1997,"Nissan Stagea RS Four V",26,439,"Japan","Autoshow, Wheelspin"],["Nissan",1998,"Nissan #23 Pennzoil NISMO Skyline GT-R",23,848,"Japan","Collection Journal"],["Nissan",1998,"Nissan R390 (GT1)",27,774,"Japan","Collection Journal"],["Nissan",1998,"Nissan Silvia K's Aero",25,494,"Japan","Autoshow, Wheelspin"],["Nissan",1998,"Nissan Skyline GT-R 40th Anniversary",25,547,"Japan","Autoshow DLC Car Pass"],["Nissan",2000,"Nissan #36 Dream Project S15 Silvia WTAC",8,996,"Japan","Autoshow DLC Time Attack Car Pack"],["Nissan",2000,"Nissan Skyline GT-R V Spec II",25,590,"Japan","Autoshow, Wheelspin"],["Nissan",2002,"Nissan Silvia Spec-R",25,551,"Japan","Autoshow, Wheelspin"],["Nissan",2003,"Nissan Fairlady Z",25,534,"Japan","Autoshow, Wheelspin"],["Nissan",2010,"Nissan 370Z",14,568,"Japan","Seasonal"],["Nissan",2012,"Nissan GT-R Black Edition (R35)",16,703,"Japan","Autoshow, Wheelspin"],["Nissan",2012,"Nissan GT-R Black Edition (R35) Forza Edition",8,850,"Japan","Wheelspin, Seasonal"],["Nissan",2017,"Nissan GT-R (R35)",16,709,"Japan","Autoshow, Wheelspin"],["Nissan",2019,"Nissan 370Z Nismo",14,603,"Japan","Autoshow, Wheelspin"],["Nissan",2020,"Nissan GT-R NISMO (R35)",32,736,"Japan","Autoshow, Wheelspin"],["Nissan",2024,"Nissan GT-R Nismo",32,741,"Japan","Autoshow, Collection Journal"],["Nissan",2024,"Nissan Z NISMO",14,652,"Japan","Autoshow, Wheelspin"],["Noble",2010,"Noble M600",16,793,"UK","Autoshow, Wheelspin"],["Opel",1984,"Opel Manta 400",19,576,"Germany","Autoshow, Collection Journal"],["Pagani",2009,"Pagani Zonda R",8,918,"Italy","Autoshow, Wheelspin"],["Pagani",2010,"Pagani Zonda Cinque Roadster",11,812,"Italy","Autoshow"],["Pagani",2016,"Pagani Huayra BC Coupe",11,851,"Italy","Autoshow, Wheelspin"],["Pagani",2021,"Pagani Huayra R",8,954,"Italy","Seasonal"],["Peel",1962,"Peel P50",5,100,"UK","Autoshow, Wheelspin"],["Peel",1962,"Peel P50 Trolli Edition",5,100,"UK","Autoshow DLC Partnership DLC"],["Penhall",2011,"Penhall The Cholla",34,541,"USA","Autoshow, Wheelspin"],["Peugeot",1984,"Peugeot 205 Turbo 16",24,500,"France","Collection Journal"],["Peugeot",1991,"Peugeot 205 Rallye",21,350,"France","Autoshow, Wheelspin"],["Peugeot",2007,"Peugeot 207 Super 2000",19,632,"France","Seasonal"],["Plymouth",1958,"Plymouth Fury",28,361,"USA","Autoshow, Wheelspin"],["Plymouth",1968,"Plymouth Barracuda Formula S",1,445,"USA","Autoshow, Wheelspin"],["Plymouth",1971,"Plymouth Cuda 426 HEMI",1,441,"USA","Autoshow, Wheelspin"],["Polaris",2021,"Polaris RZR Pro XP Factory Racing Limited Edition",33,439,"USA","Autoshow, Wheelspin"],["Polaris",2021,"Polaris RZR Pro XP Ultimate",33,496,"USA","Autoshow, Collection Journal"],["Pontiac",1977,"Pontiac Firebird Trans Am",1,312,"USA","Autoshow, Wheelspin"],["Pontiac",1987,"Pontiac Firebird Trans Am GTA",22,382,"USA","Autoshow, Wheelspin"],["Porsche",1970,"Porsche #3 917 LH",2,777,"Germany","Autoshow, Collection Journal"],["Porsche",1970,"Porsche #3 917 LH Forza Edition",8,998,"Germany","Wheelspin, Seasonal"],["Porsche",1973,"Porsche 911 Carrera RS",20,490,"Germany","Autoshow, Wheelspin"],["Porsche",1982,"Porsche 911 Turbo 3.3",27,550,"Germany","Collection Journal"],["Porsche",1985,"Porsche #185 959 Prodrive Rally Raid",19,623,"Germany","Autoshow, Wheelspin"],["Porsche",1987,"Porsche Carrera Coupe 'Luftauto 002'",19,561,"Germany","Autoshow DLC Car Pass"],["Porsche",1987,"Porsche 959",27,661,"Germany","Treasure"],["Porsche",1987,"Porsche #203 Porsche AG 961",23,840,"Germany","Autoshow DLC Car Pass"],["Porsche",1989,"Porsche 944 Turbo",25,539,"Germany","Autoshow, Wheelspin"],["Porsche",1993,"Porsche 911 Turbo S Leichtbau",25,652,"Germany","Seasonal"],["Porsche",1993,"Porsche 928 GTS",25,563,"Germany","Autoshow, Wheelspin"],["Porsche",1993,"Porsche 968 Turbo S",25,594,"Germany","Autoshow, Wheelspin"],["Porsche",1995,"Porsche 911 GT2",27,644,"Germany","Wheelspin, Seasonal"],["Porsche",1997,"Porsche 911 GT1 Strassenversion",27,746,"Germany","Autoshow, Wheelspin"],["Porsche",2003,"Porsche Carrera GT",27,758,"Germany","Collection Journal, Seasonal"],["Porsche",2004,"Porsche 911 GT3",27,674,"Germany","Autoshow, Wheelspin"],["Porsche",2005,"Porsche Cayman GT3 WTAC",8,856,"Germany","Autoshow, Wheelspin"],["Porsche",2012,"Porsche 911 GT3 RS 4.0",32,726,"Germany","Autoshow, Collection Journal"],["Porsche",2014,"Porsche 918 Spyder",11,858,"Germany","Autoshow, Collection Journal"],["Porsche",2018,"Porsche 718 Cayman GTS",14,675,"Germany","Autoshow, Wheelspin"],["Porsche",2018,"Porsche 911 GT2 RS",32,803,"Germany","Autoshow, Wheelspin"],["Porsche",2018,"Porsche Cayenne Turbo",29,638,"Germany","Autoshow, Wheelspin"],["Porsche",2018,"Porsche Macan LPR Rally Raid",17,528,"Germany","Autoshow, Wheelspin"],["Porsche",2019,"Porsche #70 Porsche Motorsport 935",8,853,"Germany","Autoshow, Wheelspin"],["Porsche",2019,"Porsche 911 Carrera S",14,714,"Germany","Autoshow, Wheelspin"],["Porsche",2019,"Porsche 911 GT3 RS",32,760,"Germany","Wheelspin, Seasonal"],["Porsche",2020,"Porsche Taycan Turbo S",15,725,"Germany","Autoshow, Wheelspin"],["Porsche",2021,"Porsche 911 GT3",32,752,"Germany","Autoshow, Wheelspin"],["Porsche",2021,"Porsche Mission R",8,865,"Germany","Autoshow, Wheelspin"],["Porsche",2022,"Porsche 718 Cayman GT4 RS",32,737,"Germany","Autoshow, Collection Journal"],["Porsche",2023,"Porsche 911 GT3 RS",32,758,"Germany","Autoshow, Wheelspin"],["Porsche",2023,"Porsche 911 Rallye",19,700,"Germany","Seasonal"],["Porsche",2023,"Porsche 911 Turbo S",16,774,"Germany","Autoshow, Wheelspin"],["Radical",2015,"Radical RXC Turbo",8,842,"UK","Autoshow, Wheelspin"],["Ram",2024,"Ram 1500 TRX",18,514,"USA","Autoshow"],["Reliant",1972,"Reliant Supervan III",36,100,"UK","Autoshow, Wheelspin"],["Renault",1967,"Renault 8 Gordini",3,322,"France","Seasonal"],["Renault",1980,"Renault 5 Turbo",24,417,"France","Autoshow, Wheelspin"],["Renault",1993,"Renault Clio Williams",21,400,"France","Autoshow, Wheelspin"],["Renault",1998,"Renault Sport Spider",25,508,"France","Autoshow DLC Car Pass"],["Renault",2008,"Renault Mégane R26.R",10,561,"France","Autoshow, Wheelspin"],["Renault",2010,"Renault Megane RS 250",31,538,"France","Autoshow, Wheelspin"],["Renault",2018,"Renault Megane R.S.",31,547,"France","Autoshow, Wheelspin"],["Rimac",2021,"Rimac Nevera",11,913,"Croatia","Wheelspin, Seasonal"],["Rivian",2022,"Rivian R1T",18,607,"USA","Autoshow, Wheelspin"],["RJ Anderson",2016,"RJ Anderson #37 Polaris RZR Pro 2 Truck",35,674,"USA","Autoshow, Collection Journal"],["RJ Anderson",2021,"RJ Anderson #37 Polaris RZR Pro 4 Truck",35,677,"USA","Wheelspin, Seasonal"],["Saleen",2004,"Saleen S7",27,773,"USA","Seasonal"],["Saleen",2017,"Saleen S7 LM",8,835,"USA","Seasonal"],["Schuppan",1993,"Schuppan 962CR",27,764,"UK","Seasonal"],["Shelby",1965,"Shelby Cobra 427 S/C",20,582,"USA","Collection Journal, Seasonal"],["Shelby",1965,"Shelby Cobra Daytona Coupe",2,515,"USA","Autoshow, Wheelspin"],["SIERRA Cars",2020,"SIERRA Cars #23 Yokohama ALPHA",8,926,"USA","Autoshow, Wheelspin"],["SIERRA Cars",2021,"SIERRA Cars 700R",33,346,"USA","Autoshow, Wheelspin"],["SIERRA Cars",2021,"SIERRA Cars RX3",33,635,"USA","Autoshow, Wheelspin"],["SRT",2013,"SRT Viper GTS",12,707,"USA","Autoshow, Wheelspin, Loyalty"],["Subaru",1980,"Subaru BRAT GL",36,159,"Japan","Autoshow, Wheelspin"],["Subaru",1990,"Subaru LEGACY RS",24,406,"Japan","Autoshow, Wheelspin"],["Subaru",1994,"Subaru Vivio RX-R",7,281,"Japan","Autoshow, Wheelspin"],["Subaru",1994,"Subaru Vivio RX-R Forza Edition",8,900,"Japan","Collection Journal, Seasonal"],["Subaru",1996,"Subaru SVX",25,466,"Japan","Autoshow, Wheelspin"],["Subaru",1998,"Subaru Impreza 22B-STi Version",24,600,"Japan","Autoshow, Wheelspin"],["Subaru",2004,"Subaru IMPREZA WRX STI",13,552,"Japan","Autoshow, Wheelspin"],["Subaru",2005,"Subaru IMPREZA WRX STI",13,570,"Japan","Autoshow, Wheelspin"],["Subaru",2005,"Subaru LEGACY B4 2.0 GT",26,549,"Japan","Autoshow, Wheelspin"],["Subaru",2008,"Subaru IMPREZA WRX STI",13,539,"Japan","Autoshow, Wheelspin"],["Subaru",2011,"Subaru WRX STI",13,547,"Japan","Autoshow, Wheelspin"],["Subaru",2013,"Subaru BRZ",14,463,"Japan","Autoshow, Wheelspin"],["Subaru",2015,"Subaru WRX STI",13,555,"Japan","Autoshow, Wheelspin"],["Subaru",2018,"Subaru WRX STI ARX Supercar",19,757,"Japan","Seasonal"],["Subaru",2019,"Subaru STI S209",13,574,"Japan","Seasonal"],["Subaru",2022,"Subaru BRZ",14,551,"Japan","Autoshow, Wheelspin"],["Subaru",2022,"Subaru BRZ Forza Edition",35,700,"Japan","Aftermarket"],["Subaru",2022,"Subaru WRX",13,538,"Japan","Autoshow, Wheelspin"],["Toyota",1965,"Toyota Sports 800",4,141,"Japan","Collection Journal, Wheelspin, Seasonal"],["Toyota",1965,"Toyota Sports 800 Fanta Edition",4,141,"Japan","Autoshow DLC Partnership DLC"],["Toyota",1969,"Toyota 2000GT",20,377,"Japan","Collection Journal"],["Toyota",1974,"Toyota Celica GT",4,287,"Japan","Seasonal"],["Toyota",1974,"Toyota Corolla SR5",4,197,"Japan","Seasonal"],["Toyota",1979,"Toyota FJ40",18,157,"Japan","Autoshow, Wheelspin"],["Toyota",1985,"Toyota Sprinter Trueno GT Apex",25,376,"Japan","Autoshow, Wheelspin"],["Toyota",1985,"Toyota Sprinter Trueno GT Apex Forza Edition",32,600,"Japan","Collection Journal, Seasonal"],["Toyota",1989,"Toyota MR2 SC",25,397,"Japan","Seasonal"],["Toyota",1991,"Toyota Chaser GT Twin Turbo",26,484,"Japan","Autoshow, Wheelspin"],["Toyota",1991,"Toyota Sera",7,344,"Japan","Autoshow, Wheelspin"],["Toyota",1992,"Toyota Celica GT-Four RC ST185",24,438,"Japan","Autoshow"],["Toyota",1992,"Toyota Supra 2.0 GT",25,453,"Japan","Autoshow, Wheelspin"],["Toyota",1993,"Toyota #1 T100 Baja Truck",35,584,"Japan","Autoshow, Wheelspin"],["Toyota",1994,"Toyota Celica GT-Four ST205",24,479,"Japan","Autoshow, Wheelspin"],["Toyota",1995,"Toyota J&J Motorsport Supra WTAC",8,828,"Japan","Autoshow DLC Time Attack Car Pack"],["Toyota",1995,"Toyota MR2 GT",25,522,"Japan","Autoshow, Wheelspin"],["Toyota",1996,"Toyota Starlet Glanza V",21,435,"Japan","Seasonal"],["Toyota",1997,"Toyota Chaser 2.5 Tourer V",26,504,"Japan","Autoshow, Collection Journal"],["Toyota",1997,"Toyota Soarer 2.5 GT-T",25,491,"Japan","Autoshow, Collection Journal, Wheelspin"],["Toyota",1998,"Toyota Supra RZ",25,529,"Japan","Autoshow, Collection Journal, Wheelspin"],["Toyota",1999,"Toyota Altezza RS200 Z EDITION",26,461,"Japan","Seasonal"],["Toyota",2003,"Toyota Celica Sport Specialty II",25,433,"Japan","Autoshow, Wheelspin"],["Toyota",2005,"Toyota Crown Super Deluxe Taxi",26,181,"Japan","Autoshow, Wheelspin"],["Toyota",2013,"Toyota 86",14,460,"Japan","Autoshow, Wheelspin"],["Toyota",2013,"Toyota 86 Stories",32,685,"Japan","Collection Journal, Seasonal"],["Toyota",2016,"Toyota Land Cruiser Arctic Trucks AT37",18,332,"Japan","Seasonal"],["Toyota",2017,"Toyota JPN Taxi",7,248,"Japan","Autoshow, Wheelspin"],["Toyota",2019,"Toyota 4Runner TRD Pro",18,421,"Japan","Autoshow, Wheelspin"],["Toyota",2019,"Toyota Tacoma TRD Pro",18,409,"Japan","Autoshow, Wheelspin"],["Toyota",2019,"Toyota Tacoma TRD Pro Forza Edition",8,998,"Japan","Autoshow DLC VIP"],["Toyota",2020,"Toyota GR Supra",14,616,"Japan","Autoshow, Collection Journal, Wheelspin"],["Toyota",2021,"Toyota GR Yaris",13,558,"Japan","Autoshow, Wheelspin"],["Toyota",2022,"Toyota GR86",14,556,"Japan","Autoshow, Wheelspin"],["Toyota",2023,"Toyota Camry TRD",15,525,"Japan","Autoshow"],["Toyota",2023,"Toyota GR Corolla",31,596,"Japan","Autoshow DLC Car Pass"],["Toyota",2024,"Toyota Prius Prime XSE Premium",10,472,"Japan","Autoshow DLC Car Pass"],["Toyota",2025,"Toyota Land Cruiser",29,456,"Japan","Autoshow, Wheelspin"],["TVR",1998,"TVR Cerbera Speed 12",27,770,"UK","Seasonal"],["TVR",2005,"TVR Sagaris",25,672,"UK","Autoshow, Wheelspin"],["TVR",2018,"TVR Griffith",14,729,"UK","Autoshow"],["Ultima",2015,"Ultima Evolution Coupe 1020",8,925,"UK","Autoshow, Wheelspin"],["Vauxhall",2006,"Vauxhall Astra VXR",31,512,"UK","Seasonal"],["Volkswagen",1963,"Volkswagen Beetle",5,100,"Germany","Autoshow, Wheelspin"],["Volkswagen",1963,"Volkswagen Type 2 De Luxe",5,100,"Germany","Autoshow, Collection Journal"],["Volkswagen",1969,"Volkswagen Class 5/1600 Baja Bug",0,260,"Germany","Autoshow, Wheelspin"],["Volkswagen",1982,"Volkswagen Pickup LX",36,100,"Germany","Autoshow, Wheelspin"],["Volkswagen",1983,"Volkswagen Golf GTI",21,314,"Germany","Autoshow, Wheelspin"],["Volkswagen",1989,"Volkswagen Rallye Golf",24,440,"Germany","Seasonal"],["Volkswagen",1992,"Volkswagen Golf Gti 16v Mk2",21,308,"Germany","Autoshow, Wheelspin"],["Volkswagen",1995,"Volkswagen Corrado VR6",21,426,"Germany","Autoshow, Wheelspin"],["Volkswagen",2010,"Volkswagen Golf R",31,526,"Germany","Autoshow, Wheelspin"],["Volkswagen",2011,"Volkswagen Scirocco R",10,548,"Germany","Autoshow, Wheelspin"],["Volkswagen",2014,"Volkswagen Golf R",31,536,"Germany","Autoshow, Wheelspin"],["Volkswagen",2017,"Volkswagen #34 Andretti Rally Cross Beetle",19,764,"Germany","Autoshow, Wheelspin"],["Volkswagen",2021,"Volkswagen Golf R",31,546,"Germany","Autoshow, Wheelspin"],["Volkswagen",2022,"Volkswagen Golf R",31,548,"Germany","Autoshow, Wheelspin"],["Volvo",1983,"Volvo 242 Turbo Evolution",3,435,"Sweden","Autoshow, Wheelspin"],["Wuling",2013,"Wuling Sunshine S",36,107,"China","Autoshow, Wheelspin"],["Wuling",2013,"Wuling Sunshine S Forza Edition",32,800,"China","Wheelspin, Seasonal"],["Wuling",2022,"Wuling Hongguang Mini EV",10,100,"China","Autoshow, Wheelspin"],["Zenvo",2019,"Zenvo TSR-S",11,906,"Denmark","Autoshow, Wheelspin"]]};
+const CLASSES=[["D",100,400],["C",401,500],["B",501,600],["A",601,700],["S1",701,800],["S2",801,900],["R",901,998]];
+const clsOf=pi=>CLASSES.find(c=>pi>=c[1]&&pi<=c[2])||CLASSES[6];
+const TYPE_HE={"Buggies":"באגי","Classic Muscle":"מאסל קלאסי","Classic Racers":"מרוץ קלאסי","Classic Rally":"ראלי קלאסי","Classic Sports Cars":"ספורט קלאסי","Cult Cars":"רכבי קאלט","Drift Cars":"רכבי דריפט","Eclectic Domestics":"יפניות מקומיות","Extreme Track Toys":"צעצועי מסלול קיצוניים","GT Cars":"GT","Hot Hatch":"הוט האץ'","Hypercars":"היפרקאר","Modern Muscle":"מאסל מודרני","Modern Rally":"ראלי מודרני","Modern Sports Cars":"ספורט מודרני","Modern Super Saloons":"סדאן-על מודרני","Modern Supercars":"סופרקאר מודרני","Offroad":"שטח","Pickups & 4x4's":"טנדרים ו-4x4","Rally Monsters":"מפלצות ראלי","Rare Classics":"קלאסיקות נדירות","Retro Hot Hatch":"הוט האץ' רטרו","Retro Muscle":"מאסל רטרו","Retro Racers":"מרוץ רטרו","Retro Rally":"ראלי רטרו","Retro Sports Cars":"ספורט רטרו","Retro Super Saloons":"סדאן-על רטרו","Retro Supercars":"סופרקאר רטרו","Rods and Customs":"הוט רוד וקסטום","Sports Utility Heroes":"SUV ספורטיביים","Super GT":"סופר GT","Super Hot Hatch":"סופר הוט האץ'","Track Toys":"צעצועי מסלול","UTV's":"UTV","Unlimited Buggies":"באגי ללא הגבלה","Unlimited Offroad":"שטח ללא הגבלה","Utility Heroes":"רכבי עבודה"};
+// affinity per type: road, dirt, cross, drift, street, drag
+const AFF={"Buggies":[2,8,8,1,2,2],"Classic Muscle":[4,2,1,6,6,8],"Classic Racers":[9,1,0,3,7,5],"Classic Rally":[4,9,6,4,4,2],"Classic Sports Cars":[6,3,2,7,6,3],"Cult Cars":[1,3,2,2,2,1],"Drift Cars":[3,1,0,10,5,4],"Eclectic Domestics":[2,2,1,2,2,1],"Extreme Track Toys":[10,2,1,4,8,7],"GT Cars":[7,2,1,6,7,7],"Hot Hatch":[6,6,4,2,6,3],"Hypercars":[9,3,2,5,9,10],"Modern Muscle":[6,2,1,8,7,9],"Modern Rally":[6,9,7,4,6,4],"Modern Sports Cars":[8,4,2,7,7,4],"Modern Super Saloons":[7,5,3,6,7,6],"Modern Supercars":[9,4,2,5,9,8],"Offroad":[1,7,9,1,1,1],"Pickups & 4x4's":[1,5,8,2,2,3],"Rally Monsters":[7,10,8,5,7,5],"Rare Classics":[5,2,1,4,5,3],"Retro Hot Hatch":[6,6,4,3,6,2],"Retro Muscle":[5,2,1,7,6,7],"Retro Racers":[10,1,0,3,7,6],"Retro Rally":[5,10,7,4,5,3],"Retro Sports Cars":[7,4,2,8,7,4],"Retro Super Saloons":[6,5,3,7,6,4],"Retro Supercars":[8,3,1,5,8,7],"Rods and Customs":[2,1,1,4,3,5],"Sports Utility Heroes":[3,6,7,1,4,5],"Super GT":[8,2,1,6,8,8],"Super Hot Hatch":[7,7,5,3,7,4],"Track Toys":[10,3,1,5,8,5],"UTV's":[1,8,9,1,1,1],"Unlimited Buggies":[1,9,10,1,1,2],"Unlimited Offroad":[1,7,10,1,1,2],"Utility Heroes":[2,2,2,3,2,3]};
+const DISCS=[
+ {id:"road",he:"כביש / מסלול",
+  steps:[["צמיגים","Sport במחלקות D–B, Semi-Slick מ-A, Race ב-S2 ומעלה. זה השדרוג עם הכי הרבה אחיזה לכל נקודת PI."],["הפחתת משקל","משפרת האצה, בלימה ופניות בבת אחת."],["מתלים ומוטות ייצוב","Race מאפשר לכוון גובה, קשיחות וקמבר."],["בלמים","Race מקצרים בלימה לפני פניות חדות."],["אווירודינמיקה","כנף אחורית וספוילר קדמי מתכווננים מ-A ומעלה."],["הנעה","AWD עוזר ברכב חזק מ-S1 ומעלה. ב-D–B עדיף להישאר עם ההנעה המקורית."],["כוח","מה שנשאר מהתקציב: אינטייק, פליטה, ואז טורבו/מגדש."]],
+  tune:[["לחץ צמיגים","27–28.5 psi"],["קמבר קדמי / אחורי","-1.5° / -1.0°"],["קסטר","5.5–6.5°"],["מוט ייצוב קדמי מול אחורי","בינוני מקדימה, קצת רך יותר מאחור"],["דיפרנציאל RWD האצה / האטה","40–60% / 20–40%"],["גובה רכב","נמוך, בלי לגרד"]]},
+ {id:"dirt",he:"ראלי / עפר",
+  steps:[["צמיגי ראלי","בלעדיהם הרכב מחליק בכל פנייה."],["מתלי ראלי","גובה ומהלך שבולעים קפיצות ובורות."],["הנעה AWD","יציאה מפניות על חצץ בלי לסחרר גלגלים."],["הפחתת משקל","קפיצות ונחיתות יציבות יותר."],["בלמים","מספיק Sport, אחיזה היא המגבלה ולא הבלמים."],["כוח","בכמויות מתונות, עודף כוח רק מסחרר גלגלים."]],
+  tune:[["לחץ צמיגים","26–28 psi"],["גובה רכב","באמצע הטווח"],["קפיצים","רכים, 30–40% מהטווח"],["חלוקת כוח מרכזית (AWD)","60–65% לאחור"],["דיפרנציאל אחורי האצה","45–55%"]]},
+ {id:"cross",he:"קרוס קאנטרי",
+  steps:[["צמיגי שטח","Off-Road לאחיזה בבוץ, חול ודשא."],["מתלי שטח","הגובה המקסימלי ככה שהרכב לא נתקע על מכשולים."],["הנעה AWD","כמעט חובה בקרוס קאנטרי."],["הפחתת משקל","מהיר יותר בעליות ובנחיתות."],["כוח","מומנט נמוך עדיף על כוח בסל\"ד גבוה."]],
+  tune:[["לחץ צמיגים","24–27 psi"],["גובה רכב","מקסימום או קרוב"],["קפיצים","הכי רכים"],["ריסון חזרה (Rebound)","נמוך, כדי שהגלגל יחזור לקרקע מהר"],["חלוקת כוח מרכזית (AWD)","55–65% לאחור"]]},
+ {id:"drift",he:"דריפט",
+  steps:[["הנעה RWD","אם הרכב AWD או FWD, החליפו ל-RWD."],["מתלי דריפט","מוסיפים זווית היגוי, השדרוג החשוב ביותר לדריפט."],["צמיגי Drift","אחיזה צפויה בזמן החלקה."],["כוח","הרבה כוח ומומנט כדי להחזיק את הזווית."],["דיפרנציאל מירוץ","נעילה מלאה בהאצה."],["הפחתת משקל","מעבר מהיר יותר בין צדדים."]],
+  tune:[["לחץ קדמי / אחורי","31 / 27 psi"],["קמבר קדמי","-3° עד -5°"],["קסטר","6–7°"],["דיפרנציאל האצה","100%"],["מוט ייצוב אחורי","קשיח, קדמי רך"]]},
+ {id:"street",he:"מרוצי רחוב",
+  steps:[["צמיגים","Sport או Semi-Slick, כביש ציבורי עם תנועה דורש אחיזה סלחנית."],["כוח","קטעים ישרים ארוכים, אז מהירות מקסימלית חשובה יותר מבמסלול."],["הפחתת משקל","האצה מהירה אחרי עקיפות."],["מתלים ובלמים","Sport מספיק לרוב."],["תיבת הילוכים","Race כדי לכוון יחס סופי ארוך יותר."]],
+  tune:[["לחץ צמיגים","29–30.5 psi"],["יחס העברה סופי","מעט ארוך יותר מהמקורי"],["קפיצים","קצת רכים מהגדרת מסלול"],["אווירודינמיקה","מינימום לטובת מהירות"],["דיפרנציאל אחורי האצה","55–65%"]]},
+ {id:"drag",he:"דראג / מהירות",
+  steps:[["צמיגי Drag","הזינוק הוא חצי מהמרוץ."],["הנעה AWD","זינוק בלי סחרור, במיוחד ברכבים חזקים."],["כוח מקסימלי","מנוע, טורבו/מגדש, הזרקה."],["תיבת הילוכים Race","כוונון יחסים לכל רצועת דראג."],["הפחתת משקל","כל קילו נספר בהאצה."],["בלי אווירודינמיקה","כנפיים מוסיפות גרר ומורידות מהירות סופית."]],
+  tune:[["לחץ קדמי / אחורי","45–55 / 15–22 psi"],["חלוקת כוח מרכזית","70–80% לאחור"],["גובה אחורי","גבוה מהקדמי להעברת משקל"],["יחס העברה סופי","לפי אורך הרצועה, להגיע לסל\"ד שיא בקו"],["קפיצים אחוריים","רכים"]]}
+];
+const CARS=RAW.c.map((r,i)=>{const t=RAW.t[r[3]];const name=r[2];return{i,make:r[0],year:r[1],name,type:t,pi:r[4],cty:r[5],col:r[6],dlc:/DLC/.test(r[6]),fe:/Forza Edition|Welcome Pack|Preorder/.test(name)}});
+const COL_HE=c=>c.replace("Autoshow DLC","DLC:").replace("Autoshow","אוטושואו").replace("Wheelspin","גלגל מזל").replace("Collection Journal","יומן אוסף").replace("Seasonal","פרס עונתי").replace("Treasure","מציאת אסם").replace("Loyalty","נאמנות").replace("Aftermarket","אפטרמרקט");
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const plate=(pi,cl)=>{cl=cl||clsOf(pi)[0];return `<span class="plate" style="--pc:var(--c${cl})"><b>${cl}</b><i>${pi}</i></span>`};
+let mine=new Set();try{mine=new Set(JSON.parse(localStorage.getItem("fh6mine")||"[]"))}catch(e){}
+const saveMine=()=>{try{localStorage.setItem("fh6mine",JSON.stringify([...mine]))}catch(e){};$("#mineCount").textContent=mine.size?`(${mine.size})`:""};
+let st={disc:0,cls:3};try{Object.assign(st,JSON.parse(localStorage.getItem("fh6st")||"{}"))}catch(e){}
+
+function score(c,d,cl){
+  const [n,lo,hi]=CLASSES[cl];
+  if(c.pi>hi) return null;
+  if(c.fe && c.pi<lo) return null;
+  const aff=AFF[c.type][d];
+  const fit=c.pi>=lo?100-(hi-c.pi)*0.15:Math.max(0,85-(lo-c.pi)*0.35);
+  return Math.round(aff*7+fit*0.3);
+}
+function reasons(c,d,cl){
+  const [n,lo,hi]=CLASSES[cl];const r=[];
+  const aff=AFF[c.type][d];
+  if(aff>=9) r.push("סוג אידאלי"); else if(aff<=3) r.push("סוג לא טבעי");
+  if(c.pi>=lo) r.push(hi-c.pi<=25?"כמעט בתקרה":`${hi-c.pi} PI לשדרוג`);
+  else r.push(`עולה ממחלקה ${clsOf(c.pi)[0]}`);
+  return r;
+}
+function rowHTML(c,rank,sc,extra){
+  return `<li><button class="row" data-i="${c.i}">
+   <span class="rank">${rank??""}</span>
+   <span class="meta"><span class="nm"><bdi>${esc(c.year)} ${esc(c.name)}</bdi></span>
+   <span class="sub"><span>${TYPE_HE[c.type]}</span>${c.dlc?'<span class="tag warn">DLC</span>':""}${c.fe?'<span class="tag">בנייה קבועה</span>':""}${mine.has(c.i)?'<span class="tag own">יש לי</span>':""}${extra||""}</span>
+   ${sc!=null?`<span class="bar"><span style="width:${sc}%"></span></span>`:""}</span>
+   <span class="side">${plate(c.pi)}${sc!=null?`<span class="score">${sc}</span>`:""}</span>
+  </button></li>`;
+}
+function renderBuild(){
+  $("#discs").innerHTML=DISCS.map((d,i)=>`<button class="chip" aria-pressed="${i==st.disc}" data-d="${i}">${d.he}</button>`).join("");
+  $("#classes").innerHTML=CLASSES.map((c,i)=>`<button class="chip cls-chip" aria-pressed="${i==st.cls}" data-c="${i}" aria-label="מחלקה ${c[0]}">${plate(c[2],c[0])}</button>`).join("");
+  const nd=$("#noDlc").checked,nf=$("#noFe").checked,om=$("#onlyMine").checked;
+  const res=CARS.filter(c=>!(nd&&c.dlc)&&!(nf&&c.fe)&&!(om&&!mine.has(c.i)))
+    .map(c=>({c,s:score(c,st.disc,st.cls)})).filter(x=>x.s!=null)
+    .sort((a,b)=>b.s-a.s||b.c.pi-a.c.pi).slice(0,15);
+  const [n,lo,hi]=CLASSES[st.cls];
+  $("#sum").innerHTML=`<strong>${DISCS[st.disc].he}</strong> במחלקה <strong>${n}</strong> (PI ${lo}–${hi}). ${res.length?"הכי מתאימים למעלה, לחצו על רכב לתוכנית בנייה.":""}`;
+  $("#results").innerHTML=res.length?res.map((x,k)=>rowHTML(x.c,k+1,x.s,reasons(x.c,st.disc,st.cls).map(t=>`<span class="tag">${t}</span>`).join(""))).join("")
+    :`<li class="empty">${om?"אין רכבים מסומנים שמתאימים. סמנו רכבים בלשונית \"כל הרכבים\" או בטלו את הסינון.":"אין רכבים מתאימים לסינון הזה."}</li>`;
+}
+let fcls=-1,shown=60;
+function renderAll(){
+  $("#fclasses").innerHTML=`<button class="chip" aria-pressed="${fcls<0}" data-f="-1">הכל</button>`+CLASSES.map((c,i)=>`<button class="chip cls-chip" aria-pressed="${fcls==i}" data-f="${i}" aria-label="מחלקה ${c[0]}">${plate(c[2],c[0])}</button>`).join("");
+  const q=$("#q").value.trim().toLowerCase();
+  const list=CARS.filter(c=>(fcls<0||clsOf(c.pi)[0]==CLASSES[fcls][0])&&(!q||`${c.year} ${c.name} ${c.type} ${TYPE_HE[c.type]}`.toLowerCase().includes(q))).sort((a,b)=>b.pi-a.pi);
+  $("#allSum").innerHTML=`<strong>${list.length}</strong> רכבים, ממוינים לפי PI.`;
+  $("#allList").innerHTML=list.slice(0,shown).map(c=>rowHTML(c)).join("")||`<li class="empty">לא נמצא רכב. נסו שם יצרן באנגלית, למשל Nissan.</li>`;
+  $("#moreBtn").hidden=list.length<=shown;
+}
+function renderMine(){
+  const l=CARS.filter(c=>mine.has(c.i)).sort((a,b)=>b.pi-a.pi);
+  $("#mineList").innerHTML=l.length?l.map(c=>rowHTML(c)).join(""):`<li class="empty">עוד לא סימנתם רכבים. פתחו רכב כלשהו ולחצו "יש לי".</li>`;
+}
+function ladder(c,cl){
+  const W=v=>((v-100)/898*100);
+  return `<div class="ladder" aria-hidden="true">${CLASSES.map((k,i)=>`<span class="seg${i==cl?" tgt":""}" style="left:${W(k[1])}%;width:${W(k[2])-W(k[1])}%;background:var(--c${k[0]})"></span>`).join("")}
+   <span class="mk" style="left:${W(c.pi)}%"><span>${c.pi}</span></span></div>`;
+}
+function openCar(i){
+  const c=CARS[i],d=DISCS[st.disc],cl=st.cls,[n,lo,hi]=CLASSES[cl];
+  const s=score(c,st.disc,cl),budget=hi-c.pi;
+  let plan;
+  if(c.pi>hi) plan=`<p class="note">הרכב כבר במחלקה ${clsOf(c.pi)[0]} במצב מקורי, מעל תקרת ${n}. בחרו מחלקה גבוהה יותר כדי לקבל תוכנית בנייה.</p>`;
+  else if(c.fe) plan=`<p class="note">רכב Forza Edition / חבילה מגיע עם בנייה קבועה ולרוב אי אפשר לשנות בו חלקים. אפשר לשחק עם הכוונון בלבד.</p>`;
+  else plan=`<h3>תוכנית שדרוג ל-${d.he} · תקציב ${budget} PI</h3><ol class="steps">${d.steps.map(x=>`<li><div><b>${x[0]}</b><span>${x[1]}</span></div></li>`).join("")}</ol>
+   <p class="note">טיפ: התקינו לפי הסדר ועקבו אחרי מד ה-PI. כשמתקרבים ל-${hi}, החליפו חלקי כוח יקרים בהפחתת משקל או צמיגים.</p>`;
+  $("#sheetIn").innerHTML=`<span class="grip"></span>
+   <div class="sh-head"><div><p class="lbl"><bdi>${esc(c.make)}</bdi> · ${c.year}</p><h2><bdi>${esc(c.name)}</bdi></h2></div><button class="x" id="close" aria-label="סגירה">✕</button></div>
+   ${ladder(c,cl)}
+   <dl class="kv">
+    <div><dt>PI מקורי</dt><dd>${c.pi} · ${clsOf(c.pi)[0]}</dd></div>
+    <div><dt>סוג</dt><dd>${TYPE_HE[c.type]}</dd></div>
+    <div><dt>התאמה ל${d.he} ${n}</dt><dd>${s!=null?s+" / 100":"—"}</dd></div>
+    <div><dt>מדינה</dt><dd>${esc(c.cty)}</dd></div>
+    <div style="grid-column:1/-1"><dt>איך משיגים</dt><dd>${esc(COL_HE(c.col))}</dd></div>
+   </dl>
+   ${plan}
+   <h3>כוונון התחלתי</h3>
+   <table class="tune"><tbody>${d.tune.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td></tr>`).join("")}</tbody></table>
+   <p class="note">ערכי פתיחה כלליים. כוונו משם לפי התחושה: תת-היגוי? רככו מוט ייצוב קדמי. סחרור ביציאה? הורידו נעילת דיפרנציאל.</p>
+   <div class="btnrow"><button class="btn pri" id="toUp">תכנון שדרוגים מפורט</button><button class="btn" id="own">${mine.has(i)?"✓ יש לי · הסר":"יש לי ברכב הזה"}</button></div>`;
+  if($("#sheet").hidden){lockY=window.scrollY;document.body.style.top=(-lockY)+"px";document.body.classList.add("lock")}
+  $("#scrim").hidden=false;$("#sheet").hidden=false;$("#sheet").scrollTop=0;
+  $("#close").onclick=closeSheet;$("#close").focus();
+  $("#own").onclick=()=>{mine.has(i)?mine.delete(i):mine.add(i);saveMine();openCar(i);refresh()};
+  $("#toUp").onclick=()=>{up.car=i;up.cls=Math.max(st.cls,CLASSES.findIndex(k=>k[0]===clsOf(c.pi)[0]));up.cat=st.disc===5?2:(st.disc===1||st.disc===2)?1:0;up.sub=st.disc===2?1:0;$("#uq").value="";closeSheet();showView("up");renderUp()};
+}
+/* ---------- upgrade planner ---------- */
+const UPC=[{he:"גריפ",en:"GRIP",disc:[0]},{he:"שטח",en:"OFF-ROAD",disc:[1,2]},{he:"דראג",en:"DRAG",disc:[5]}];
+const PRIO={must:"חובה",rec:"מומלץ",opt:"אם נשאר PI",skip:"דלגו"};
+let up={car:null,cat:0,sub:0,cls:st.cls};
+const tierOf=cl=>cl<=2?0:cl<=4?1:2;
+function dtGuess(t){
+  if(/Rally|Rally Monsters/.test(t)) return "סוג הרכב מרמז שהוא כנראה כבר AWD מהמפעל, בדקו לפני שמשלמים על החלפת הנעה.";
+  if(/Hot Hatch/.test(t)) return "האצ'בקים הם לרוב FWD. ברוב הקטגוריות כדאי לשקול החלפה ל-AWD.";
+  if(t==="Drift Cars") return "רכב דריפט מגיע בבנייה מוכנה ל-RWD.";
+  return "";
+}
+function upRows(cat,sub,tier){
+  const T=(a,b,c)=>[a,b,c][tier];
+  if(cat===0) return [
+    ["צמיגים",T("Sport · רוחב מקורי (רכב קל יכול להישאר על Stock)","Semi-Slick ב-A · Race Slicks ב-S1 · רוחב +1","Race Slicks · רוחב מקסימלי (לפעמים דורש Widebody)"),"must","הכי הרבה אחיזה לכל נקודת PI."],
+    ["הפחתת משקל","Race",T("must","rec","rec"),"משפרת האצה, בלימה ופניות. בקלאסים נמוכים קודם משקל, אחר כך כוח."],
+    ["מתלים","Race",T("rec","must","must"),"פותח כוונון גובה, קפיצים וקמבר."],
+    ["מוטות ייצוב","Race","rec","שליטה באיזון תת/על-היגוי."],
+    ["דיפרנציאל","Race",T("rec","must","must"),"כוונון נעילה ביציאה מפנייה."],
+    ["בלמים",T("Sport","Race","Race"),T("opt","rec","must"),"בלימה מאוחרת יותר לפני פניות."],
+    ["תיבת הילוכים",T("Sport / Race","Race","Race"),T("rec","rec","must"),"התאמת יחסים למסלול."],
+    ["הנעה",T("השאירו מקורית","AWD רק אם אין אחיזה ביציאה","AWD"),T("skip","opt","rec"),T("ב-B ומטה החלפה ל-AWD אוכלת חלק גדול מהתקציב.","ברכב RWD מאוזן עדיף להישאר.","ב-S1/S2 האחיזה ביציאה מצדיקה את מחיר ה-PI.")],
+    ["אווירודינמיקה",T("דלגו","כנף + ספוילר מתכווננים","Forza Aero / מתכוונן קדימה ואחורה"),T("skip","rec","must"),"כוח הצמדה בפניות מהירות. אל תעלו אוטומטית למקסימום."],
+    ["חישוקים","הקלים ביותר · 17–18\"","opt","פחות משקל לא קפיצי."],
+    ["מנוע",T("אינטייק, פליטה, מצתים, אחרונים בתור","אחרי האחיזה: טורבו / מגדש","שקלו סוואפ מנוע אם המקורי חלש"),T("opt","rec","rec"),"כוח בא אחרי אחיזה ובלימה."]
+  ];
+  if(cat===1) return [
+    ["צמיגים",sub?"Off-Road · רוחב +1, שווה מקדימה ומאחור":"Rally · רוחב +1, שווה מקדימה ומאחור","must",sub?"אחיזה בבוץ, חול ודשא.":"עובדים גם על קטעי אספלט במסלולים מעורבים."],
+    ["הנעה","AWD","must","בעפר ובקרוס קאנטרי זו חובה כדי להיות תחרותי."],
+    ["מתלים",sub?"Off-Road":"Rally","must","מהלך ארוך וגובה שבולעים קפיצות ובורות."],
+    ["חישוקים","קלים · 15–16\"","must",sub?"חישוק גדול עלול לפוצץ צמיג בנחיתות.":"דופן גבוהה סופגת מכות."],
+    ["דיפרנציאל","Race","must","לכוונון חלוקה מרכזית ונעילה."],
+    ["הפחתת משקל","Race","rec","נחיתות יציבות ועליות מהירות."],
+    ["תיבת הילוכים","Race · יחס סופי קצר מכביש","rec","תאוצה בין פניות קרובות."],
+    ["מוטות ייצוב","Race (מכוונים רך)","rec","גלגלים שנשארים על הקרקע."],
+    ["מנוע",T("מומנט נמוך: אינטייק, פליטה","טורבו קטן / מגדש","כוח במידה, עודף כוח מסחרר גלגלים"),"rec","מומנט בסל\"ד נמוך עדיף על כוח בסל\"ד גבוה."],
+    ["בלמים","Sport","opt","האחיזה היא המגבלה, לא הבלמים."],
+    ["אווירודינמיקה",T("דלגו","דלגו","ספוילר אחורי בלבד"),T("skip","skip","opt"),"במהירויות עפר הגרר עולה יותר מהתועלת."]
+  ];
+  return [
+    ["צמיגים","Drag אם זמין לרכב, אחרת Race Slicks · רוחב מקסימלי מאחור","must","הזינוק הוא חצי מהמרוץ."],
+    ["הנעה","AWD","must","זינוק בלי סחרור, במיוחד ברכב חזק."],
+    ["מנוע","כל חלקי הכוח + סוואפ למנוע טורבו כפול / מגדש","must","מהירות סופית ותאוצה."],
+    ["תיבת הילוכים","Race · 8–10 הילוכים אם זמין","must","להישאר ברצועת הכוח לאורך כל הרבע מייל."],
+    ["דיפרנציאל","Race","must","נעילה גבוהה בהאצה."],
+    ["הפחתת משקל","Race","must","כל קילו נספר."],
+    ["מתלים","Race","rec","מאפשר להנמיך חזית ולהגביה אחור."],
+    ["מוטות ייצוב","Race · אחורי קשיח","opt","הרכב נשאר ישר בזינוק."],
+    ["חישוקים","הקלים ביותר","opt","פחות מסה מסתובבת."],
+    ["בלמים","מקורי","skip","אין פניות, חוסך PI."],
+    ["אווירודינמיקה","הסירו / מינימום","skip","גרר מוריד מהירות סופית."]
+  ];
+}
+function upTune(cat,sub){
+  if(cat===0) return [["לחץ צמיגים","27–28.5 psi"],["קמבר קדמי / אחורי","-1.2…-1.8° / -0.8…-1.4°"],["קסטר","5.5–6.5°"],["דיפרנציאל RWD האצה / האטה","40–60% / 20–40%"],["AWD חלוקה מרכזית","70–85% לאחור"],["AWD נעילה קדמית / אחורית","28% / 100% האצה"],["גובה","נמוך, בלי לגרד"]];
+  if(cat===1) return sub
+   ?[["לחץ צמיגים","24–27 psi"],["גובה","מקסימום או קרוב"],["קפיצים","הכי רכים"],["ריסון חזרה","רך, הגלגל חוזר לקרקע מהר"],["AWD חלוקה מרכזית","55–65% לאחור"],["נעילה קדמית / אחורית","35–45% / 65–75%"],["קסטר","5–6°"]]
+   :[["לחץ צמיגים","26–28 psi"],["גובה","בינוני-גבוה"],["קפיצים ומוטות","רכים מכביש"],["קמבר קדמי / אחורי","-0.8…-1.5° / -0.5…-1.2°"],["AWD חלוקה מרכזית","65–75% לאחור"],["נעילה קדמית / אחורית","30–40% / 55–70%"],["יחס סופי","קצר מכביש"]];
+  return [["לחץ קדמי","45–55 psi"],["לחץ אחורי","15–22 (RWD) · 18–25 (AWD) psi"],["קמבר / טואו","0° / 0°"],["גובה","חזית נמוכה, אחור בינוני"],["AWD חלוקה מרכזית","70–80% לאחור"],["דיפרנציאל האצה","90–100%"],["הילוך 1","ארוך מספיק שלא יסחרר"],["הילוך אחרון","מגיע לרד-ליין על קו הסיום"]];
+}
+function renderUp(){
+  $("#upCats").innerHTML=UPC.map((u,i)=>`<button aria-pressed="${i==up.cat}" data-uc="${i}">${u.he}<small>${u.en}</small></button>`).join("");
+  $("#upSub").innerHTML=up.cat===1?["ראלי / עפר","קרוס קאנטרי"].map((s,i)=>`<button class="chip" aria-pressed="${i==up.sub}" data-us="${i}">${s}</button>`).join(""):"";
+  $("#upClasses").innerHTML=CLASSES.map((c,i)=>`<button class="chip cls-chip" aria-pressed="${i==up.cls}" data-ucl="${i}" aria-label="מחלקה ${c[0]}">${plate(c[2],c[0])}</button>`).join("");
+  const q=$("#uq").value.trim().toLowerCase();
+  const disc=UPC[up.cat].disc[up.cat===1?up.sub:0];
+  let picks;
+  if(q) picks=CARS.filter(c=>`${c.year} ${c.name}`.toLowerCase().includes(q)).slice(0,6).map(c=>rowHTML(c).replace('class="row"','class="row" data-pick="1"'));
+  else if(!up.car) picks=CARS.filter(c=>!c.dlc&&!c.fe).map(c=>({c,s:score(c,disc,up.cls)})).filter(x=>x.s!=null).sort((a,b)=>b.s-a.s).slice(0,5)
+     .map((x,k)=>rowHTML(x.c,k+1,x.s).replace('class="row"','class="row" data-pick="1"'));
+  else picks=[];
+  $("#upPicks").innerHTML=(!q&&!up.car&&picks.length?`<li class="note">אין רכב בראש? אלה המובילים ל${UPC[up.cat].he} ב-${CLASSES[up.cls][0]}:</li>`:"")+picks.join("");
+  const c=up.car!=null?CARS[up.car]:null;
+  $("#upCar").innerHTML=c?`<div class="chosen"><span class="meta"><span class="nm"><bdi>${c.year} ${esc(c.name)}</bdi></span><span class="sub">${TYPE_HE[c.type]}</span></span><span class="side">${plate(c.pi)}<button class="linkbtn" id="upClear">החלפת רכב</button></span></div>`:"";
+  if(!c){$("#upPlan").innerHTML=`<div class="empty">בחרו רכב כדי לקבל רשימת שדרוגים לפי סדר עדיפות.</div>`;return}
+  const [n,lo,hi]=CLASSES[up.cls],budget=hi-c.pi,tier=tierOf(up.cls);
+  const g=dtGuess(c.type);
+  let head=`<div class="budget"><span><span class="lbl" style="margin:0">תקציב PI ל-${n}</span><br><span class="big${budget<0?" neg":""}">${budget>=0?budget:budget}</span></span>
+    <span class="note" style="flex:1;min-width:180px">${budget<0?`הרכב מגיע ב-PI ${c.pi}, מעל תקרת ${n}. בחרו מחלקה גבוהה יותר.`:budget<30?"מעט מקום: התמקדו בצמיגים ובכוונון.":`מ-${c.pi} עד ${hi}. התקינו לפי הסדר ועקבו אחרי מד ה-PI.`}</span></div>`;
+  if(c.fe){$("#upPlan").innerHTML=head+`<div class="callout">רכב Forza Edition / חבילה מגיע עם בנייה קבועה ולרוב אי אפשר להחליף בו חלקים. השתמשו בטבלת הכוונון בלבד.</div>`+tuneTbl();return}
+  if(budget<0){$("#upPlan").innerHTML=head;return}
+  const rows=upRows(up.cat,up.sub,tier);
+  const order={must:0,rec:1,opt:2,skip:3};
+  rows.sort((a,b)=>order[a[2]]-order[b[2]]);
+  $("#upPlan").innerHTML=head+
+   (g?`<div class="callout">${g}</div>`:"")+
+   `<div style="display:flex;flex-direction:column;gap:8px"><h3>שדרוגים ל${UPC[up.cat].he}${up.cat===1?" · "+(up.sub?"קרוס קאנטרי":"ראלי"):""} במחלקה ${n}</h3>
+   <div class="legend">${Object.entries(PRIO).map(([k,v])=>`<span class="pr-${k}"><i></i>${v}</span>`).join("")}</div>
+   <ol class="parts">${rows.map(r=>`<li class="part pr-${r[2]}"><span class="pn">${r[0]}</span><span class="prio">${PRIO[r[2]]}</span><span class="pc">${esc(r[1])}</span><span class="pw">${r[3]}</span></li>`).join("")}</ol></div>`+
+   `<div class="callout">סוואפ מנוע: ב-Upgrades & Tuning ← Custom Upgrade ← Body Kits and Conversions. אפשר לבדוק אילו מנועים זמינים לרכב ב<a href="https://forza.net/fh6engines" target="_blank" rel="noopener">רשימת הסוואפים הרשמית</a>.</div>`+tuneTbl();
+  function tuneTbl(){return `<div style="display:flex;flex-direction:column;gap:8px"><h3>כוונון התחלתי</h3><table class="tune"><tbody>${upTune(up.cat,up.sub).map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td></tr>`).join("")}</tbody></table><p class="note">ערכי פתיחה כלליים. שנו בצעדים קטנים (0.5 psi בלחץ) ובדקו בנסיעה.</p></div>`}
+}
+function showView(v){view=v;document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v));["build","up","all","mine"].forEach(x=>$("#v-"+x).hidden=x!==v);window.scrollTo(0,0)}
+let lockY=0;
+function closeSheet(){
+  if($("#sheet").hidden) return;
+  $("#scrim").hidden=true;$("#sheet").hidden=true;$("#sheet").style.transform="";
+  document.body.classList.remove("lock");document.body.style.top="";
+  try{window.scrollTo(0,lockY)}catch(e){}
+}
+/* swipe down to close the sheet on touch screens */
+(()=>{let y0=null,dy=0;const sh=document.getElementById("sheet");
+  sh.addEventListener("touchstart",e=>{y0=sh.scrollTop<=0?e.touches[0].clientY:null;dy=0},{passive:true});
+  sh.addEventListener("touchmove",e=>{if(y0==null)return;dy=e.touches[0].clientY-y0;if(dy>0)sh.style.transform=`translateY(${dy}px)`},{passive:true});
+  sh.addEventListener("touchend",()=>{if(y0==null)return;if(dy>90)closeSheet();else sh.style.transform="";y0=null});
+})();
+let view="build";
+function refresh(){renderBuild();renderUp();renderAll();renderMine()}
+document.addEventListener("click",e=>{
+  if(e.target.closest("#upClear")){up.car=null;renderUp();$("#uq").focus();return}
+  const u=e.target.closest("[data-uc],[data-us],[data-ucl],[data-pick]");
+  if(u){
+    if(u.dataset.uc!=null){up.cat=+u.dataset.uc;up.sub=0}
+    else if(u.dataset.us!=null) up.sub=+u.dataset.us;
+    else if(u.dataset.ucl!=null) up.cls=+u.dataset.ucl;
+    else {const c=CARS[+u.dataset.i];up.car=c.i;$("#uq").value="";const ci=CLASSES.findIndex(k=>k[0]===clsOf(c.pi)[0]);if(up.cls<ci) up.cls=ci}
+    renderUp();return;
+  }
+  const t=e.target.closest("[data-d],[data-c],[data-f],.row,.tab");if(!t) return;
+  if(t.classList.contains("tab")){showView(t.dataset.v);return}
+  if(t.dataset.d!=null){st.disc=+t.dataset.d}
+  else if(t.dataset.c!=null){st.cls=+t.dataset.c}
+  else if(t.dataset.f!=null){fcls=+t.dataset.f;shown=60;renderAll();return}
+  else if(t.classList.contains("row")){openCar(+t.dataset.i);return}
+  try{localStorage.setItem("fh6st",JSON.stringify(st))}catch(e){}
+  renderBuild();
+});
+["noDlc","noFe","onlyMine"].forEach(id=>$("#"+id).addEventListener("change",renderBuild));
+$("#q").addEventListener("input",()=>{shown=60;renderAll()});
+$("#uq").addEventListener("input",renderUp);
+$("#moreBtn").onclick=()=>{shown+=60;renderAll()};
+$("#scrim").onclick=closeSheet;
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSheet()});
+$("#total").textContent=CARS.length;saveMine();refresh();
+if("serviceWorker" in navigator&&location.protocol==="https:"){navigator.serviceWorker.register("sw.js").catch(()=>{})}
+</script>
+
+</body>
+</html>
